@@ -256,8 +256,8 @@ function App(props) {
         logoutOfWeb3Modal={logoutOfWeb3Modal}
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <Menu style={{ width: "200px", marginTop: "40px" }} selectedKeys={[location.pathname]} mode="inline">
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        <Menu style={{ width: "200px" }} selectedKeys={[location.pathname]} mode="horizontal">
           <Menu.Item key="/">
             <Link to="/">App Home</Link>
           </Menu.Item>
@@ -360,7 +360,7 @@ function App(props) {
         </Switch>
       </div>
 
-      <ThemeSwitch />
+      {/* <ThemeSwitch /> */}
 
       {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
       <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>

@@ -1,8 +1,72 @@
 import React from "react";
-import { Input, DatePicker, InputNumber, Radio } from "antd";
+import MDEditor from "@uiw/react-md-editor";
+import { Input, DatePicker, InputNumber, Radio, Button, Select } from "antd";
 import _ from "underscore";
 import "./styles.css";
+import { useState } from "react";
 
+const tokenOptions = ["DAI", "MATIC", "HNY"];
+
+function EndlessArray({ onChange }) {
+  const [val, setVal] = useState(null);
+  const [arr, setArr] = useState([]);
+  return (
+    <div>
+      {arr.map((i, k) => {
+        return (
+          <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+            <p>{i}</p>
+            <a
+              onClick={() => {
+                let arrCp = arr.slice();
+                arrCp.splice(k, 1);
+                setArr(arrCp);
+                onChange(arrCp);
+              }}
+            >
+              x
+            </a>
+          </div>
+        );
+      })}
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <Input placeholder={"add addresss"} onChange={i => setVal(i.target.value)} />
+        <Button
+          onClick={() => {
+            setArr([...arr, val]);
+            onChange([...arr, val]);
+          }}
+        >
+          +
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+function TokenAmount({ onChange }) {
+  const [selectedToken, setSelectedToken] = useState(tokenOptions[0]);
+  const [amount, setAmount] = useState(0);
+  const Option = Select.Option;
+  return (
+    <div>
+      <Select defaultValue={selectedToken} style={{ width: 120 }} onChange={i => setSelectedToken(i)}>
+        {tokenOptions.map(i => {
+          return <Option value={i}>{i}</Option>;
+        })}
+      </Select>
+      <InputNumber
+        onChange={a => {
+          setAmount(a);
+          onChange({
+            symbol: selectedToken,
+            amount: a,
+          });
+        }}
+      />
+    </div>
+  );
+}
 function SectionParser(props) {
   const { section, variables, setInputs } = props;
 
@@ -20,7 +84,7 @@ function SectionParser(props) {
       case "address":
         return <Input placeholder={key} value={variables[key]} onChange={i => setInputs(key, i.target.value)} />;
       case "longtext":
-        return <Input.TextArea rows={4} value={variables[key]} onChange={i => setInputs(key, i.target.value)} />;
+        return <MDEditor value={variables[key]} onChange={i => setInputs(key, i)} height={400} preview={"edit"} />;
       case "number":
         return <InputNumber defaultValue={variables[key]} onChange={i => setInputs(key, i)} />;
       case "multiple":
@@ -35,10 +99,10 @@ function SectionParser(props) {
             })}
           </Radio.Group>
         );
-      case "tokenList":
+      case "token":
         return (
           <Radio.Group value={key}>
-            {["xDAI", "HNY"]?.map(i => {
+            {tokenOptions?.map(i => {
               return (
                 <Radio value={i} onChange={() => setInputs(key, i)}>
                   {i}
@@ -49,13 +113,17 @@ function SectionParser(props) {
         );
       case "date":
         return <DatePicker onChange={i => setInputs(key, i)} />;
+      case "endlessArray":
+        return <EndlessArray onChange={i => setInputs(key, i)} />;
+      case "tokenAmount":
+        return <TokenAmount onChange={i => setInputs(key, i)} />;
       default:
         return null;
     }
   };
 
   return (
-    <>
+    <div className="input-container">
       <h3>{section.title}</h3>
       {_.map(section, (sec, key) => {
         const fulfillsCondtion = sec?.condition ? validateCondition(sec.condition) : true;
@@ -69,7 +137,7 @@ function SectionParser(props) {
         }
         return null;
       })}
-    </>
+    </div>
   );
 }
 

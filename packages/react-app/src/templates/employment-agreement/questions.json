@@ -72,7 +72,7 @@
       },
       "currencyList": {
         "text": "What is the currency or currencies that will be used to pay this salary?",
-        "type": "tokenList"
+        "type": "token"
       },
       "annualSalary": {
         "text": "How much will the annual salary be, in U.S. dollars?",

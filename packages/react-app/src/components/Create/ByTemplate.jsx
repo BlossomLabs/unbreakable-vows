@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Steps, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
-import EmploymentAgreement from "../../templates/employment-agreement";
 import { prepareQuesions } from "../../templates/utils";
 import "./styles.css";
 import _ from "underscore";
@@ -18,15 +17,15 @@ Handlebars.registerHelper("xx", function (value) {
   return value || "__________";
 });
 
-const ByTemplate = () => {
+const ByTemplate = ({ agreement }) => {
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
   const [current, setCurrent] = useState(0);
   const [mdText, setMdText] = useState("null");
-  const questions = EmploymentAgreement.questions;
+  const questions = agreement.questions;
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
-  console.log({ variables });
+
   const next = () => {
     setCurrent(current + 1);
   };
@@ -40,7 +39,7 @@ const ByTemplate = () => {
   };
 
   const getTemplateReady = () => {
-    fetch(EmploymentAgreement.template)
+    fetch(agreement.template)
       .then(response => {
         return response.text();
       })
@@ -48,7 +47,6 @@ const ByTemplate = () => {
         setMdText(text);
       });
   };
-
   useEffect(() => {
     // Set variables
     const preparedQs = prepareQuesions(questions);
@@ -57,10 +55,10 @@ const ByTemplate = () => {
 
     // Get template ready
     getTemplateReady();
-  }, []);
+  }, [agreement]);
 
-  console.log({ variables, sections, template });
   if (!variables && !sections) return null;
+
   return (
     <div className="bytemplate-container">
       <div className="left-bytemplate">
@@ -70,7 +68,7 @@ const ByTemplate = () => {
           ))}
         </Steps>
         <div className="steps-content">
-          <div>{<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} />}</div>
+          {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} />}
           <div className="steps-action">
             {current < sections.length - 1 && (
               <Button type="primary" onClick={() => next()}>

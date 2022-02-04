@@ -1,0 +1,13 @@
+{
+  "name": "Custom agreement",
+  "description": "...",
+  "form": {
+    "Custom Agreement": {
+      "contract": {
+        "text": "Customize your own contract",
+        "type": "longtext"
+      }
+    }
+  },
+  "agreement": ""
+}
