@@ -1,0 +1,198 @@
+{
+  "name": "Employment agreement",
+  "description": "A employment agreement is the document by which employers and their employees can define their rights and obligations at the start of the employment relationship.",
+  "form": {
+    "Introduction": {
+      "employerType": {
+        "text": "Is the employer an individual or an organization?",
+        "type": ["Individual", "Organization"]
+      },
+      "individualEmployerName": {
+        "text": "What is the employer’s name?",
+        "type": "text",
+        "condition": "employerType==1"
+      },
+      "organizationEmployerName": {
+        "text": "What is the employer’s business name?",
+        "type": "text",
+        "condition": "employerType==2"
+      },
+      "organizationType": {
+        "text": "What type of organization is the employer’s business?",
+        "type": ["Corporation", "Limited liability company", "Partnership", "DAO"],
+        "condition": "employerType==2"
+      },
+      "employerAddress": {
+        "text": "What is the employer's Ethereum address?",
+        "type": "address",
+        "condition": "employerType"
+      },
+      "employeeName": {
+        "text": "What is the employee’s name?",
+        "type": "text",
+        "condition": "employerType"
+      },
+      "employeeAddress": {
+        "text": "What is the employee's Ethereum address?",
+        "type": "address",
+        "condition": "employerType==2"
+      }
+    },
+    "Type of employment": {
+      "employmentType": {
+        "text": "What type of employment will this relationship be?",
+        "type": ["Permantent full-Time", "Permanent part-time", "Fixed-term"]
+      }
+    },
+    "Position": {
+      "employeePosition": {
+        "text": "What will be the employee's position?",
+        "type": "text"
+      },
+      "employeeDuties": {
+        "text": "Enter the employee’s duties, as they are expected to be performed under this contract.",
+        "type": "longtext"
+      }
+    },
+    "Trial period": {
+      "trialPeriodExist": {
+        "text": "Is the employee subject to any kind of probationary period at the start of the employment relationship?",
+        "type": ["Yes", "No"]
+      },
+      "timePeriod": {
+        "text": "How long is the probationary time period?",
+        "type": "number",
+        "condition": "trialPeriodExist==1"
+      }
+    },
+    "Compensation": {
+      "compensationType": {
+        "text": "How will the compensation be?",
+        "type": ["Annual", "Hourly", "Commission", "Wage plus comission"]
+      },
+      "currencyList": {
+        "text": "What is the currency or currencies that will be used to pay this salary?",
+        "type": "tokenList"
+      },
+      "annualSalary": {
+        "text": "How much will the annual salary be, in U.S. dollars?",
+        "type": "number",
+        "condition": "compensationType==1"
+      },
+      "detailsAnnualSalary": {
+        "text": "Enter the specific details of how payment is made to the employee each pay period.",
+        "type": "longtext",
+        "condition": "compensationType==1"
+      },
+      "hourlySalary": {
+        "text": "Amount of hourly compensation the employee will receive, in U.S. dollars.",
+        "type": "number",
+        "condition": "compensationType==2"
+      },
+      "detailsHourlySalary": {
+        "text": "Enter the specific details of how payment is made to the employee each pay period.",
+        "type": "longtext",
+        "condition": "compensationType==2"
+      },
+      "comissionSalary": {
+        "text": "Enter the details of the commission compensation structure.",
+        "type": "longtext",
+        "condition": "compensationType==3"
+      },
+      "wagePlusCommission": {
+        "text": "Enter the details of the wage plus commission compensation structure.",
+        "type": "longtext",
+        "condition": "compensationType==4"
+      }
+    },
+    "Bonus": {
+      "monetaryBonus": {
+        "text": "Does employee’s compensation include any kind of monetary bonus?",
+        "type": ["Yes", "No"]
+      },
+      "bonusStructure": {
+        "text": "Enter the details of the employee’s bonus structure.",
+        "type": "longtext"
+      }
+    },
+    "Performance reviews": {
+      "review": {
+        "text": "Will the employee be subject to any kind of review of their compensation, such as a formal or informal discussion at specific time periods?",
+        "type": ["Yes", "No"]
+      },
+      "reviewFrequency": {
+        "text": "How often will compensation be reviewed?",
+        "type": ["Monthly", "Quaterly", "Half-year", "Annual"],
+        "condition": "review==1"
+      },
+      "kpi": {
+        "text": "Which are the key performance indicators?",
+        "type": ["30% completed", "50% completed", "75% completed", "100% completed", "Other"]
+      }
+    },
+    "Schedule and Vacations": {
+      "schedule": {
+        "text": "What will the employee’s work schedule be (including number of hours, specific days if any, etc.)?",
+        "type": "longtext"
+      },
+      "vacation": {
+        "text": "UNKNOWN",
+        "type": ["Days", "Weeks"]
+      },
+      "vacationDays": {
+        "text": "How many days of vacation will employee receive per year?",
+        "type": "number",
+        "condition": "vacation==1"
+      },
+      "vacationWeeks": {
+        "text": "How many weeks of vacation will employee receive per year?",
+        "type": "number",
+        "condition": "vacation==2"
+      },
+      "rollOver": {
+        "text": "If the employee does not use all of their vacation time, does it roll over to the next year?",
+        "type": ["Yes", "No"]
+      },
+      "vacationLimit": {
+        "text": "Does the employee have a limit to how much vacation time they can roll over and stockpile?",
+        "type": ["Yes", "No"]
+      },
+      "vacationStockpile": {
+        "text": "How much vacation time can the employee roll over and stockpile before they must use it or lose it (in days)",
+        "type": "number"
+      }
+    },
+    "Renovation": {
+      "renovation": {
+        "text": "Should the agreement automatically renew?",
+        "type": ["Yes", "No"]
+      },
+      "writtenNotice": {
+        "text": "How many weeks notice does the employee need to give for termination?",
+        "type": "number",
+        "condition": "renovation==1"
+      }
+    },
+    "Governing Law": {
+      "governingLaw": {
+        "text": "Which will be the arbitrator of this agreement?",
+        "type": ["Celeste", "Ethereum address"]
+      }
+    },
+    "Disputes": {
+      "disputes": {
+        "text": "In the event a dispute arises, how will it be resolved?",
+        "type": ["Arbitration", "Mediation", "Mediation and Arbitration"]
+      },
+      "startingDate": {
+        "text": "What is the date of this agreement?",
+        "type": "date"
+      },
+      "endDate": {
+        "text": "What is the date the employment relationship will end?",
+        "type": "date"
+      }
+    }
+  },
+  "agreement": "\n{{#eq employerType 1}}\nThis employment agreement, hereinafter referred to as \"Agreement\", is entered into and made effective as of the date set forth at the end of this document by and between the following parties: {{individualEmployerName}}, an individual, with the Ethereum address {{employerAddress}}; and {{employeeName}}, an individual, with the Ethereum address {{employeeAddress}}.{{/eq}}\n\n{{#eq employerType 2}}This employment agreement, hereinafter referred to as \"Agreement\", is entered into and made effective as of the date set forth at the end of this document by and between the following parties: {{organizationEmployerName}}, an {{organizationType}}, with the Ethereum address {{employerAddress}}; and {{employeeName}}, an individual, with the Ethereum address {{employeeAddress}}.{{/eq}}"
+}
