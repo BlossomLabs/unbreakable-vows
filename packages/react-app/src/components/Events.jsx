@@ -12,7 +12,7 @@ import  Address from "./Address";
 
   <Events
     contracts={readContracts}
-    contractName="YourContract"
+    contractName="UnbreakableVow"
     eventName="SetPurpose"
     localProvider={localProvider}
     mainnetProvider={mainnetProvider}

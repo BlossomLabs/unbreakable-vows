@@ -64,8 +64,18 @@ module.exports = {
   // Follow the directions, and uncomment the network you wish to deploy to.
 
   networks: {
+    hardhat: {
+      forking: {
+        url: "https://speedy-nodes-nyc.moralis.io/cff107316eaa320c66ca9c51/polygon/mainnet/archive",
+        blockNumber: 24478879,
+      },
+    },
     localhost: {
       url: "http://localhost:8545",
+      forking: {
+        url: "https://speedy-nodes-nyc.moralis.io/cff107316eaa320c66ca9c51/polygon/mainnet/archive",
+        blockNumber: 24478879,
+      },
       /*      
         notice no mnemonic here? it will just use account 0 of the hardhat node to deploy
         (you can put in a mnemonic here to set the deployer locally)
@@ -298,16 +308,7 @@ module.exports = {
   solidity: {
     compilers: [
       {
-        version: "0.8.4",
-        settings: {
-          optimizer: {
-            enabled: true,
-            runs: 200,
-          },
-        },
-      },
-      {
-        version: "0.6.7",
+        version: "0.7.6",
         settings: {
           optimizer: {
             enabled: true,

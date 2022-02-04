@@ -64,10 +64,14 @@ export default function Transactor(providerOrSigner, gasPrice, etherscan) {
           result = await tx;
         } else {
           if (!tx.gasPrice) {
-            tx.gasPrice = gasPrice || ethers.utils.parseUnits("4.1", "gwei");
+            tx.gasPrice = gasPrice || ethers.utils.parseUnits("100", "gwei");
           }
           if (!tx.gasLimit) {
             tx.gasLimit = ethers.utils.hexlify(120000);
+          }
+          if (!tx.maxFeePerGas) {
+            tx.gasPrice = null;
+            tx.maxFeePerGas = ethers.utils.hexlify(273997488431);
           }
           if (DEBUG) console.log("RUNNING TX", tx);
           result = await signer.sendTransaction(tx);
