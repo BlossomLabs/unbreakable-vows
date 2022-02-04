@@ -9,7 +9,8 @@ function SectionParser(props) {
   const validateCondition = condition => {
     const a = condition?.split("==")[0];
     const b = condition?.split("==")[1];
-    const validation = section[a].type[b - 1];
+    const type = section[a].type;
+    const validation = type.indexOf(type[b - 1]) + 1;
     return b ? variables[a] == validation : !!variables[a];
   };
 
