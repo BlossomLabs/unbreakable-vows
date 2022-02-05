@@ -30,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, Create, Vows, ExampleUI, Hints, Subgraph } from "./views";
+import { Home, Create, Vows, VowViewer, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -290,6 +290,14 @@ function App(props) {
           </Route>
           <Route path="/vows">
             <Vows chainId={selectedChainId} provider={localProvider} readContracts={readContracts} address={address} />
+          </Route>
+          <Route exact path="/vow/:vowHash">
+            <VowViewer
+              chainId={selectedChainId}
+              provider={localProvider}
+              readContracts={readContracts}
+              address={address}
+            />
           </Route>
           <Route exact path="/create">
             <Create yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
