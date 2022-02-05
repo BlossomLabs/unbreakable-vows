@@ -20,7 +20,7 @@ contract UnbreakableVow {
 
   uint256 private nextSettingId = 0;
   mapping (uint256 => Setting) private settings; // List of historic agreement settings indexed by ID (starting at 1)
-  address[] private parties;
+  address[] public parties;
 
   /**
    * @notice Initialize Agreement for "`_title`" and content "`_content`", with arbitrator `_arbitrator`

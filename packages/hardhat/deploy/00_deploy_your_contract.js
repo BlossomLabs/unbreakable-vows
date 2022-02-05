@@ -49,19 +49,14 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     ]
   );
 
-  // await deploy("UnbreakableVow", {
-  //   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-  //   from: deployer,
-  //   args: [
-  //     "0xf0c8376065fadfacb706cafbaac96b321069c015",
-  //     "Employment agreement",
-  //     "0x00",
-  //     [],
-  //   ],
-  //   log: true,
-  //   waitConfirmations: 5,
-  //   gasLimit: 10000000,
-  // });
+  await deploy("UnbreakableVow", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    args: [Arbitrator.address, "Employment agreement", "0x00", []],
+    log: true,
+    waitConfirmations: 5,
+    gasLimit: 10000000,
+  });
 
   // Getting a previously deployed contract
   // const UnbreakableVow = await ethers.getContract("UnbreakableVow", deployer);

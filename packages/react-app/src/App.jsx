@@ -130,7 +130,6 @@ function App(props) {
   const localChainId = localProvider && localProvider._network && localProvider._network.chainId;
   const selectedChainId =
     userSigner && userSigner.provider && userSigner.provider._network && userSigner.provider._network.chainId;
-
   // For more hooks, check out 🔗eth-hooks at: https://www.npmjs.com/package/eth-hooks
 
   // The transactor wraps transactions and provides notificiations
@@ -290,7 +289,7 @@ function App(props) {
             <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
           </Route>
           <Route path="/vows">
-            <Vows provider={localProvider} readContracts={readContracts} />
+            <Vows chainId={selectedChainId} provider={localProvider} readContracts={readContracts} address={address} />
           </Route>
           <Route exact path="/create">
             <Create yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
