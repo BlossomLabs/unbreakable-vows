@@ -13,9 +13,11 @@ contract UnbreakableVowFactory {
     IArbitrator _arbitrator,
     string memory _title,
     bytes memory _content,
-    address[] memory _parties
+    address[] memory _parties,
+    IERC20[] memory _collateralTokens,
+    uint256[] memory _collateralAmounts
   ) public {
-    UnbreakableVow unbreakableVow = new UnbreakableVow(_arbitrator, _title, _content, _parties);
+    UnbreakableVow unbreakableVow = new UnbreakableVow(_arbitrator, _title, _content, _parties, _collateralTokens, _collateralAmounts);
     emit NewUnbreakableVow(address(unbreakableVow), _parties);
   }
 

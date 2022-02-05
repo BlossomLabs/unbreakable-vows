@@ -33,6 +33,8 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
       "Employment agreement",
       "0x00",
       [],
+      [],
+      [],
     ],
     log: true,
     waitConfirmations: 5,
