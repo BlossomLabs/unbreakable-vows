@@ -33,7 +33,7 @@ function VowViewer({ readContracts, provider, chainId }) {
       const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
       const instance = new ethers.Contract(vowHash, ABI, provider);
       const stngs = await instance.getCurrentSetting();
-      const parties = await instance.getParties();
+      const [parties] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
       const docURL = `https://gateway.pinata.cloud/ipfs/${

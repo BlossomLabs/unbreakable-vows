@@ -53,7 +53,7 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     Arbitrator.address,
     "test vow",
     "0x697066733a516d5844416332357646486478436b687161584543477031575658595a676e5147546a55386f39536e3448616158",
-    ["0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C"],
+    ["0xc125218F4Df091eE40624784caF7F47B9738086f"],
     [Token.address],
     [ethers.utils.parseUnits("10", 18)]
   );
