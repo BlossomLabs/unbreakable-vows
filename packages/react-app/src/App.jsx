@@ -15,6 +15,7 @@ import "./App.css";
 import {
   Account,
   Contract,
+  Events,
   Faucet,
   GasGauge,
   Header,
@@ -29,7 +30,7 @@ import externalContracts from "./contracts/external_contracts";
 // contracts
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
-import { Home, Create, ExampleUI, Hints, Subgraph } from "./views";
+import { Home, Create, Vows, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
 
 const { ethers } = require("ethers");
@@ -264,11 +265,11 @@ function App(props) {
           <Menu.Item key="/debug">
             <Link to="/debug">Debug Contracts</Link>
           </Menu.Item>
-          {/* <Menu.Item key="/hints">
-            <Link to="/hints">Hints</Link>
-          </Menu.Item>
           <Menu.Item key="/exampleui">
             <Link to="/exampleui">ExampleUI</Link>
+          </Menu.Item>
+          {/* <Menu.Item key="/hints">
+            <Link to="/hints">Hints</Link>
           </Menu.Item>
           <Menu.Item key="/mainnetdai">
             <Link to="/mainnetdai">Mainnet DAI</Link>
@@ -279,11 +280,17 @@ function App(props) {
           <Menu.Item key="/create">
             <Link to="/create">Create Vow</Link>
           </Menu.Item>
+          <Menu.Item key="/vows">
+            <Link to="/vows">Vows</Link>
+          </Menu.Item>
         </Menu>
         <Switch>
           <Route exact path="/">
             {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
             <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+          </Route>
+          <Route path="/vows">
+            <Vows provider={localProvider} readContracts={readContracts} />
           </Route>
           <Route exact path="/create">
             <Create yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
@@ -302,6 +309,14 @@ function App(props) {
               address={address}
               blockExplorer={blockExplorer}
               contractConfig={contractConfig}
+            />
+            <Events
+              contracts={readContracts}
+              contractName="UnbreakableVowFactory"
+              eventName="NewUnbreakableVow"
+              localProvider={localProvider}
+              mainnetProvider={mainnetProvider}
+              startBlock={1}
             />
             <Contract
               name="UnbreakableVow"

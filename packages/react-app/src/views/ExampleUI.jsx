@@ -156,8 +156,8 @@ export default function ExampleUI({
       */}
       <Events
         contracts={readContracts}
-        contractName="YourContract"
-        eventName="SetPurpose"
+        contractName="UnbreakableVowFactory"
+        eventName="NewUnbreakableVow"
         localProvider={localProvider}
         mainnetProvider={mainnetProvider}
         startBlock={1}

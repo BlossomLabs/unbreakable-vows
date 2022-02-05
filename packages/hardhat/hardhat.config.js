@@ -64,12 +64,12 @@ module.exports = {
   // Follow the directions, and uncomment the network you wish to deploy to.
 
   networks: {
-    hardhat: {
-      forking: {
-        url: "https://speedy-nodes-nyc.moralis.io/cff107316eaa320c66ca9c51/polygon/mainnet/archive",
-        blockNumber: 24478879,
-      },
-    },
+    // hardhat: {
+    //   forking: {
+    //     url: "https://speedy-nodes-nyc.moralis.io/cff107316eaa320c66ca9c51/polygon/mainnet/archive",
+    //     blockNumber: 24478879,
+    //   },
+    // },
     localhost: {
       url: "http://localhost:8545",
       forking: {

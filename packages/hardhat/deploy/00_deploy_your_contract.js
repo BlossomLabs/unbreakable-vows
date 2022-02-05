@@ -25,20 +25,6 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     gasLimit: 10000000,
   });
 
-  await deploy("UnbreakableVow", {
-    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
-    from: deployer,
-    args: [
-      "0xf0c8376065fadfacb706cafbaac96b321069c015",
-      "Employment agreement",
-      "0x00",
-      [],
-    ],
-    log: true,
-    waitConfirmations: 5,
-    gasLimit: 10000000,
-  });
-
   await deploy("Arbitrator", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -46,6 +32,36 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     waitConfirmations: 5,
     gasLimit: 10000000,
   });
+
+  const UnbreakableVowFactory = await ethers.getContract(
+    "UnbreakableVowFactory",
+    deployer
+  );
+  const Arbitrator = await ethers.getContract("Arbitrator", deployer);
+
+  await UnbreakableVowFactory.createUnbreakableVow(
+    Arbitrator.address,
+    "test vow",
+    "0x697066733a516d5844416332357646486478436b687161584543477031575658595a676e5147546a55386f39536e3448616158",
+    [
+      "0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C",
+      "0x077E5fBe6F2EEb1083AcD5877b213d5F6eE071ba",
+    ]
+  );
+
+  // await deploy("UnbreakableVow", {
+  //   // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+  //   from: deployer,
+  //   args: [
+  //     "0xf0c8376065fadfacb706cafbaac96b321069c015",
+  //     "Employment agreement",
+  //     "0x00",
+  //     [],
+  //   ],
+  //   log: true,
+  //   waitConfirmations: 5,
+  //   gasLimit: 10000000,
+  // });
 
   // Getting a previously deployed contract
   // const UnbreakableVow = await ethers.getContract("UnbreakableVow", deployer);

@@ -6,7 +6,7 @@ import "./Arbitrator.sol";
 
 contract UnbreakableVowFactory {
 
-  event NewUnbreakableVow(address vow, address[] parties);
+  event NewUnbreakableVow(address indexed vow, address indexed party);
   event NewArbitrator(address arbitrator, address owner);
 
   function createUnbreakableVow(
@@ -16,7 +16,9 @@ contract UnbreakableVowFactory {
     address[] memory _parties
   ) public {
     UnbreakableVow unbreakableVow = new UnbreakableVow(_arbitrator, _title, _content, _parties);
-    emit NewUnbreakableVow(address(unbreakableVow), _parties);
+    for(uint i = 0; i < _parties.length; i++) {
+      emit NewUnbreakableVow(address(unbreakableVow), _parties[i]);
+    }
   }
 
   function createArbitrator(address owner) public {
