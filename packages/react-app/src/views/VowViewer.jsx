@@ -5,6 +5,7 @@ import { ethers } from "ethers";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import deployedContracts from "../contracts/hardhat_contracts.json";
+import { Button } from "antd";
 
 const formatAddress = str => {
   return str?.substr(0, 5) + "..." + str?.substr(-4);
@@ -58,24 +59,53 @@ function VowViewer({ readContracts, provider, chainId }) {
   }, [readContracts, chainId, vowHash]);
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", margin: "20px", alignItems: "center", textAlign: "center" }}
-    >
-      <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-        <h2 style={{ borderRight: "1px solid black", paddingRight: 20, marginRight: 20 }}>
-          {vow?.title || "Untitled Vow"}
-        </h2>
-        <h4>{formatState(vow?.state)}</h4>
-      </div>
-      <div>
-        <h4>Parties</h4>
-        <div>
-          {vow?.parties?.map(i => {
-            return <p>{i}</p>;
-          })}
+    <div style={{ alignItems: "center", margin: "auto" }}>
+      <div
+        style={{
+          width: "600px",
+          display: "flex",
+          flexDirection: "column",
+          alignSelf: "center",
+          alignItems: "flex-end",
+          justifyContent: "center",
+        }}
+      >
+        {vow?.state !== 2 && (
+          <Button danger={vow?.state === 1} type="primary" size="small" style={{ width: "100px" }}>
+            {vow?.state === 0 ? "SIGN" : vow?.state === 1 && "Terminate"}
+          </Button>
+        )}
+
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "600px",
+            alignItems: "center",
+            textAlign: "center",
+            margin: "auto",
+            padding: "30px",
+            minHeight: "550px",
+            border: "0.5px solid black",
+          }}
+        >
+          <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
+            <h2 style={{ borderRight: "1px solid black", paddingRight: 20, marginRight: 20 }}>
+              {vow?.title || "Untitled Vow"}
+            </h2>
+            <h4>{formatState(vow?.state)}</h4>
+          </div>
+          <div style={{ marginBottom: 32 }}>
+            <h4>Parties</h4>
+            <div>
+              {vow?.parties?.map(i => {
+                return <p>{i}</p>;
+              })}
+            </div>
+          </div>
+          <ReactMarkdown>{vow?.markdown}</ReactMarkdown>
         </div>
       </div>
-      <ReactMarkdown style={{ margin: 32 }}>{vow?.markdown}</ReactMarkdown>
     </div>
   );
 }
