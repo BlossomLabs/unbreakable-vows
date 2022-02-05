@@ -258,13 +258,13 @@ function App(props) {
       />
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Menu selectedKeys={[location.pathname]} mode="horizontal">
-          <Menu.Item key="/">
+          {/* <Menu.Item key="/">
             <Link to="/">App Home</Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/debug">
             <Link to="/debug">Debug Contracts</Link>
           </Menu.Item>
-          <Menu.Item key="/hints">
+          {/* <Menu.Item key="/hints">
             <Link to="/hints">Hints</Link>
           </Menu.Item>
           <Menu.Item key="/exampleui">
@@ -275,7 +275,7 @@ function App(props) {
           </Menu.Item>
           <Menu.Item key="/subgraph">
             <Link to="/subgraph">Subgraph</Link>
-          </Menu.Item>
+          </Menu.Item> */}
           <Menu.Item key="/create">
             <Link to="/create">Create Vow</Link>
           </Menu.Item>
