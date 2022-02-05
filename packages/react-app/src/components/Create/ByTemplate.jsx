@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
+import { utils } from "ethers";
 import { Steps, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
-import { prepareQuesions } from "../../templates/utils";
+import { prepareQuesions, createMDFile, pinFileToIPFS } from "../../templates/utils";
 import "./styles.css";
 import _ from "underscore";
 import SectionParser from "./SectionParser";
@@ -47,6 +48,16 @@ const ByTemplate = ({ agreement }) => {
         setMdText(text);
       });
   };
+
+  const sign = async () => {
+    const { url, blob } = createMDFile(templateReady);
+    const ipfsHash = await pinFileToIPFS("u_vow.md", blob);
+    const bytes = utils.toUtf8Bytes(ipfsHash);
+    const hex = utils.hexlify(bytes);
+    message.success("Processing complete!");
+    console.log({ ipfsHash, bytes, hex });
+  };
+
   useEffect(() => {
     // Set variables
     const preparedQs = prepareQuesions(questions);
@@ -76,7 +87,7 @@ const ByTemplate = ({ agreement }) => {
               </Button>
             )}
             {current === sections.length - 1 && (
-              <Button type="primary" onClick={() => message.success("Processing complete!")}>
+              <Button type="primary" onClick={sign}>
                 Done
               </Button>
             )}

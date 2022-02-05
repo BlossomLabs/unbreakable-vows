@@ -56,6 +56,7 @@ function TokenAmount({ onChange }) {
         })}
       </Select>
       <InputNumber
+        placeholder="amount"
         onChange={a => {
           setAmount(a);
           onChange({
