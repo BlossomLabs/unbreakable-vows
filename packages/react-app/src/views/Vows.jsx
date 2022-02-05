@@ -7,9 +7,10 @@ function Vows({ readContracts, provider, address, chainId }) {
   const [events, setEvents] = useState(null);
   const [vows, setVows] = useState(null);
 
-  const dContracts = deployedContracts[chainId];
-  const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
   const getVows = logs => {
+    const dContracts = deployedContracts[chainId];
+    const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
+
     const vowsHashes = [];
     /// Get Hashs
     logs?.map(i => {
@@ -19,15 +20,17 @@ function Vows({ readContracts, provider, address, chainId }) {
     // Get instances
     vowsHashes.map(async (i, k) => {
       const instance = new ethers.Contract(i, ABI, provider);
-      const settings = await instance.getLastSetting();
-      //   const parties = await instance.parties();
-      //   console.log({ settings, parties });
+      console.log({ instance });
+      const settings = await instance.getCurrentSetting();
+      const parties = await instance.getParties();
+      const state = await instance.state();
+      console.log({ settings, parties, state });
       setVows({ ...vows, [i]: instance });
     });
   };
 
   const getEvents = async () => {
-    if (_.isEmpty(readContracts)) return null;
+    if (_.isEmpty(readContracts) || !chainId) return null;
     const contract = readContracts.UnbreakableVowFactory;
     const filter = contract.filters.NewUnbreakableVow(null, address);
     const fromBlock = await provider.getBlockNumber().then(b => b - 10000);
@@ -41,7 +44,7 @@ function Vows({ readContracts, provider, address, chainId }) {
 
   useEffect(() => {
     getEvents();
-  }, [readContracts]);
+  }, [readContracts, chainId]);
 
   console.log({ vows });
 

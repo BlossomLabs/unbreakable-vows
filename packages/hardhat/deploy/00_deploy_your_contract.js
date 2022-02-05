@@ -17,6 +17,16 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
+  await deploy("ERC20Mock", {
+    from: deployer,
+    log: true,
+    waitConfirmations: 5,
+    gasLimit: 10000000,
+    args: ["Fake DAI", "fDAI", deployer, ethers.utils.parseUnits("1000", 18)],
+  });
+
+  const Token = await ethers.getContract("ERC20Mock", deployer);
+
   await deploy("UnbreakableVowFactory", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -28,14 +38,6 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   await deploy("Arbitrator", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [
-      "0xf0c8376065fadfacb706cafbaac96b321069c015",
-      "Employment agreement",
-      "0x00",
-      [],
-      [],
-      [],
-    ],
     log: true,
     waitConfirmations: 5,
     gasLimit: 10000000,
@@ -51,16 +53,15 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
     Arbitrator.address,
     "test vow",
     "0x697066733a516d5844416332357646486478436b687161584543477031575658595a676e5147546a55386f39536e3448616158",
-    [
-      "0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C",
-      "0x077E5fBe6F2EEb1083AcD5877b213d5F6eE071ba",
-    ]
+    ["0x00d18ca9782bE1CaEF611017c2Fbc1a39779A57C"],
+    [Token.address],
+    [ethers.utils.parseUnits("10", 18)]
   );
 
   await deploy("UnbreakableVow", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
-    args: [Arbitrator.address, "Employment agreement", "0x00", []],
+    args: [Arbitrator.address, "Employment agreement", "0x00", [], [], []],
     log: true,
     waitConfirmations: 5,
     gasLimit: 10000000,

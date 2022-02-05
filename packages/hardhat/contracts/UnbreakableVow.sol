@@ -1,4 +1,5 @@
 pragma solidity 0.7.6;
+pragma abicoder v2;
 //SPDX-License-Identifier: MIT
 
 import "hardhat/console.sol";
@@ -31,7 +32,7 @@ contract UnbreakableVow {
     uint256 depositedAmount;
   }
 
-  UnbreakableVowState state = UnbreakableVowState.UNSIGNED;
+  UnbreakableVowState public state = UnbreakableVowState.UNSIGNED;
   uint256 public currentSettingId = 0; // All parties have to sign in order to update the setting
   uint256 private nextSettingId = 1;
   mapping (uint256 => Setting) private settings; // List of historic agreement settings indexed by ID (starting at 1)
@@ -140,6 +141,14 @@ contract UnbreakableVow {
     returns (IArbitrator arbitrator, string memory title, bytes memory content)
   {
     return getSetting(currentSettingId);
+  }
+
+  function getParties() external view returns (address[] memory){
+    address[] memory _parties = new address[](parties.length());
+    for(uint i=0; i < parties.length(); i++) {
+      _parties[i] = parties.at(i);
+    }
+    return _parties;
   }
 
   /**
