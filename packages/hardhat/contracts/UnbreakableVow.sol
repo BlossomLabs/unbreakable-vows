@@ -20,19 +20,23 @@ contract UnbreakableVow {
 
   uint256 private nextSettingId = 0;
   mapping (uint256 => Setting) private settings; // List of historic agreement settings indexed by ID (starting at 1)
+  address[] private parties;
 
   /**
    * @notice Initialize Agreement for "`_title`" and content "`_content`", with arbitrator `_arbitrator`
    * @param _arbitrator Address of the IArbitrator that will be used to resolve disputes
    * @param _title String indicating a short description
    * @param _content Link to a human-readable text that describes the initial rules for the Agreement
+   * @param _parties List of addresses that must sign the Agreement
   */
   constructor(
     IArbitrator _arbitrator,
     string memory _title,
-    bytes memory _content
+    bytes memory _content,
+    address[] memory _parties
   ) {
     _newSetting(_arbitrator, _title, _content);
+    parties = _parties;
   }
 
   /**
@@ -60,14 +64,22 @@ contract UnbreakableVow {
    * @return content Link to a human-readable text that describes the current rules for the Agreement
    */
   function getSetting(uint256 _settingId)
-      external
-      view
-      returns (IArbitrator arbitrator, string memory title, bytes memory content)
+    public
+    view
+    returns (IArbitrator arbitrator, string memory title, bytes memory content)
   {
-      Setting storage setting = _getSetting(_settingId);
-      arbitrator = setting.arbitrator;
-      title = setting.title;
-      content = setting.content;
+    Setting storage setting = _getSetting(_settingId);
+    arbitrator = setting.arbitrator;
+    title = setting.title;
+    content = setting.content;
+  }
+
+  function getLastSetting()
+    public
+    view
+    returns (IArbitrator arbitrator, string memory title, bytes memory content)
+  {
+    return getSetting(nextSettingId - 1);
   }
 
   /**

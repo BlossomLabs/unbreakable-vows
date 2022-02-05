@@ -167,7 +167,7 @@ function App(props) {
   ]);
 
   // keep track of a variable from the contract in the local React state:
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
+  const purpose = useContractReader(readContracts, "UnbreakableVowFactory", "purpose");
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -257,25 +257,25 @@ function App(props) {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Menu style={{ width: "200px" }} selectedKeys={[location.pathname]} mode="horizontal">
+        <Menu selectedKeys={[location.pathname]} mode="horizontal">
           <Menu.Item key="/">
             <Link to="/">App Home</Link>
           </Menu.Item>
-          {/* <Menu.Item key="/debug">
-          <Link to="/debug">Debug Contracts</Link>
-        </Menu.Item>
-        <Menu.Item key="/hints">
-          <Link to="/hints">Hints</Link>
-        </Menu.Item>
-        <Menu.Item key="/exampleui">
-          <Link to="/exampleui">ExampleUI</Link>
-        </Menu.Item>
-        <Menu.Item key="/mainnetdai">
-          <Link to="/mainnetdai">Mainnet DAI</Link>
-        </Menu.Item>
-        <Menu.Item key="/subgraph">
-          <Link to="/subgraph">Subgraph</Link>
-        </Menu.Item> */}
+          <Menu.Item key="/debug">
+            <Link to="/debug">Debug Contracts</Link>
+          </Menu.Item>
+          <Menu.Item key="/hints">
+            <Link to="/hints">Hints</Link>
+          </Menu.Item>
+          <Menu.Item key="/exampleui">
+            <Link to="/exampleui">ExampleUI</Link>
+          </Menu.Item>
+          <Menu.Item key="/mainnetdai">
+            <Link to="/mainnetdai">Mainnet DAI</Link>
+          </Menu.Item>
+          <Menu.Item key="/subgraph">
+            <Link to="/subgraph">Subgraph</Link>
+          </Menu.Item>
           <Menu.Item key="/create">
             <Link to="/create">Create Vow</Link>
           </Menu.Item>
@@ -294,9 +294,26 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-
             <Contract
-              name="YourContract"
+              name="UnbreakableVowFactory"
+              price={price}
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+            <Contract
+              name="UnbreakableVow"
+              price={price}
+              signer={userSigner}
+              provider={localProvider}
+              address={address}
+              blockExplorer={blockExplorer}
+              contractConfig={contractConfig}
+            />
+            <Contract
+              name="Arbitrator"
               price={price}
               signer={userSigner}
               provider={localProvider}

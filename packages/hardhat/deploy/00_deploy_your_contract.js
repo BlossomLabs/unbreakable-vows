@@ -17,6 +17,14 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
   const { deployer } = await getNamedAccounts();
   const chainId = await getChainId();
 
+  await deploy("UnbreakableVowFactory", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
+    log: true,
+    waitConfirmations: 5,
+    gasLimit: 10000000,
+  });
+
   await deploy("UnbreakableVow", {
     // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
     from: deployer,
@@ -24,7 +32,16 @@ module.exports = async ({ getNamedAccounts, deployments, getChainId }) => {
       "0xf0c8376065fadfacb706cafbaac96b321069c015",
       "Employment agreement",
       "0x00",
+      [],
     ],
+    log: true,
+    waitConfirmations: 5,
+    gasLimit: 10000000,
+  });
+
+  await deploy("Arbitrator", {
+    // Learn more about args here: https://www.npmjs.com/package/hardhat-deploy#deploymentsdeploy
+    from: deployer,
     log: true,
     waitConfirmations: 5,
     gasLimit: 10000000,
