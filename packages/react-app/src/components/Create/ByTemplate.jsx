@@ -11,7 +11,7 @@ import SectionParser from "./SectionParser";
 const { Step } = Steps;
 
 Handlebars.registerHelper("eq", function (arg1, arg2, options) {
-  return arg1 == arg2 ? options.fn(this) : options.inverse(this);
+  return arg1 === arg2 ? options.fn(this) : options.inverse(this);
 });
 
 Handlebars.registerHelper("xx", function (value) {
@@ -41,9 +41,8 @@ const ByTemplate = ({ agreement }) => {
 
   const getTemplateReady = () => {
     fetch(agreement.template)
-      .then(response => {
-        return response.text();
-      })
+      .then(response => response.text())
+      .then(text => text.replace(/\{\{\*\*/g, "{{").replace(/\*\*}}/g, "}}"))
       .then(text => {
         setMdText(text);
       });
