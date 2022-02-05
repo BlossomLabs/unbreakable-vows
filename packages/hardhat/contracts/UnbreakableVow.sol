@@ -3,14 +3,20 @@ pragma solidity 0.7.6;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
+import "@openzeppelin/contracts/utils/EnumerableSet.sol";
+import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
 import "./interfaces/IArbitrator.sol";
 
 // https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol
 
 contract UnbreakableVow {
+  using EnumerableSet for EnumerableSet.AddressSet;
+  using SafeERC20 for IERC20;
 
-
+  event Signed(address indexed signer, uint256 settingId);
   event SettingChanged(uint256 settingId);
+
+  enum UnbreakableVowState { UNSIGNED, ACTIVE, TERMINATED }
 
   struct Setting {
     IArbitrator arbitrator;
@@ -18,9 +24,19 @@ contract UnbreakableVow {
     bytes content;
   }
 
-  uint256 private nextSettingId = 0;
+  struct Party {
+    uint256 lastSettingSignedBy;
+    IERC20 collateralToken;
+    uint256 collateralAmount;
+    uint256 depositedAmount;
+  }
+
+  UnbreakableVowState state = UnbreakableVowState.UNSIGNED;
+  uint256 public currentSettingId = 0; // All parties have to sign in order to update the setting
+  uint256 private nextSettingId = 1;
   mapping (uint256 => Setting) private settings; // List of historic agreement settings indexed by ID (starting at 1)
-  address[] public parties;
+  EnumerableSet.AddressSet private parties;
+  mapping (address => Party) private partiesInfo;       // Mapping of address => last agreement setting signed
 
   /**
    * @notice Initialize Agreement for "`_title`" and content "`_content`", with arbitrator `_arbitrator`
@@ -33,27 +49,71 @@ contract UnbreakableVow {
     IArbitrator _arbitrator,
     string memory _title,
     bytes memory _content,
-    address[] memory _parties
+    address[] memory _parties,
+    IERC20[] memory _collateralTokens,
+    uint256[] memory _collateralAmounts
   ) {
-    _newSetting(_arbitrator, _title, _content);
-    parties = _parties;
+    for (uint i = 0; i < _parties.length; i++) {
+      parties.add(_parties[i]);
+      partiesInfo[_parties[i]] = Party(0, _collateralTokens[i], _collateralAmounts[i], 0);
+    }
+    proposeSetting(_arbitrator, _title, _content);
   }
 
   /**
-   * @notice Update Agreement to title "`_title`" and content "`_content`", with arbitrator `_arbitrator`
+   * @notice Propose and sign Agreement to title "`_title`" and content "`_content`", with arbitrator `_arbitrator`
    * @dev Initialization check is implicitly provided by the `auth()` modifier
    * @param _arbitrator Address of the IArbitrator that will be used to resolve disputes
    * @param _title String indicating a short description
    * @param _content Link to a human-readable text that describes the new rules for the Agreement
    */
-  function changeSetting(
+  function proposeSetting(
     IArbitrator _arbitrator,
     string memory _title,
     bytes memory _content
   )
-    external
+    public
   {
-    _newSetting(_arbitrator, _title, _content);
+    sign(_newSetting(_arbitrator, _title, _content));
+  }
+
+  /**
+    * @notice Sign the agreement up-to setting #`_settingId`
+    * @dev Callable by any party
+    * @param _settingId Last setting ID the user is agreeing with
+    */
+  function sign(uint256 _settingId) public {
+    uint256 lastSettingIdSigned = partiesInfo[msg.sender].lastSettingSignedBy;
+    console.log(_settingId, lastSettingIdSigned);
+    require(lastSettingIdSigned != _settingId, "ERROR_SIGNER_ALREADY_SIGNED");
+    require(_settingId < nextSettingId, "ERROR_INVALID_SIGNING_SETTING");
+
+    if (partiesInfo[msg.sender].depositedAmount < partiesInfo[msg.sender].collateralAmount) {
+      partiesInfo[msg.sender].collateralToken.safeTransferFrom(
+        msg.sender,
+        address(this),
+        partiesInfo[msg.sender].collateralAmount - partiesInfo[msg.sender].depositedAmount
+      );
+      partiesInfo[msg.sender].depositedAmount = partiesInfo[msg.sender].collateralAmount;
+    }
+
+    partiesInfo[msg.sender].lastSettingSignedBy = _settingId;
+    emit Signed(msg.sender, _settingId);
+  }
+
+  function unstakeCollateral() public {
+    require (state != UnbreakableVowState.ACTIVE, "ERROR_CAN_NOT_UNSTAKE_FROM_ACTIVE_VOW");
+    uint256 amount = partiesInfo[msg.sender].depositedAmount;
+    partiesInfo[msg.sender].collateralToken.transfer(msg.sender, amount);
+  }
+
+  function changeSetting(uint256 _settingId) external {
+    for (uint256 i = 0; i < parties.length(); i++) {
+      require (partiesInfo[parties.at(i)].lastSettingSignedBy == _settingId, "ERROR_NOT_ALL_PARTIES_SIGNED");
+    }
+    currentSettingId = _settingId;
+    state = UnbreakableVowState.ACTIVE;
+    emit SettingChanged(_settingId);
   }
 
   /**
@@ -74,30 +134,35 @@ contract UnbreakableVow {
     content = setting.content;
   }
 
-  function getLastSetting()
+  function getCurrentSetting()
     public
     view
     returns (IArbitrator arbitrator, string memory title, bytes memory content)
   {
-    return getSetting(nextSettingId - 1);
+    return getSetting(currentSettingId);
   }
 
   /**
-   * @dev Change agreement settings
+   * @dev Add new agreement settings
    * @param _arbitrator Address of the IArbitrator that will be used to resolve disputes
    * @param _title String indicating a short description
    * @param _content Link to a human-readable text that describes the new rules for the Agreement
+   * @return id Id of the new setting
    */
-  function _newSetting(IArbitrator _arbitrator, string memory _title, bytes memory _content) internal {
+  function _newSetting(
+    IArbitrator _arbitrator,
+    string memory _title,
+    bytes memory _content
+  )
+    internal
+    returns (uint256 id)
+  {
     require(Address.isContract(address(_arbitrator)), "ERROR_ARBITRATOR_NOT_CONTRACT");
-
-    uint256 id = nextSettingId++;
+    id = nextSettingId++;
     Setting storage setting = settings[id];
     setting.title = _title;
     setting.content = _content;
     setting.arbitrator = _arbitrator;
-
-    emit SettingChanged(id);
   }
 
   /**
