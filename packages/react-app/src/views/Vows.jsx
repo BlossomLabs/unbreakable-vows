@@ -74,13 +74,16 @@ function Vows({ readContracts, provider, address, chainId }) {
     vowsHashes.map(async (i, k) => {
       const instance = new ethers.Contract(i, ABI, provider);
       const stngs = await instance.getCurrentSetting();
-      const parties = await instance.getParties();
+      const [parties, collateralTokens, collateralAmounts, depositedAmounts] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
       setVows({
         ...vows,
         [i]: {
-          parties,
+          parties: [...parties],
+          collateralTokens,
+          collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
+          depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
           state,
           hash: i,
           arbitrator: formatAddress(stngs.arbitrator),

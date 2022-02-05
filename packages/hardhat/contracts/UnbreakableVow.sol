@@ -26,7 +26,7 @@ contract UnbreakableVow {
   }
 
   struct Party {
-    uint256 lastSettingSignedBy;
+    uint256 lastSettingIdSigned;
     IERC20 collateralToken;
     uint256 collateralAmount;
     uint256 depositedAmount;
@@ -84,8 +84,8 @@ contract UnbreakableVow {
     * @param _settingId Last setting ID the user is agreeing with
     */
   function sign(uint256 _settingId) public {
-    uint256 lastSettingIdSigned = partiesInfo[msg.sender].lastSettingSignedBy;
-    console.log(_settingId, lastSettingIdSigned);
+    uint256 lastSettingIdSigned = partiesInfo[msg.sender].lastSettingIdSigned;
+    require (state != UnbreakableVowState.TERMINATED, "ERROR_CAN_NOT_SIGN_TERMINATED_VOW");
     require(lastSettingIdSigned != _settingId, "ERROR_SIGNER_ALREADY_SIGNED");
     require(_settingId < nextSettingId, "ERROR_INVALID_SIGNING_SETTING");
 
@@ -98,7 +98,7 @@ contract UnbreakableVow {
       partiesInfo[msg.sender].depositedAmount = partiesInfo[msg.sender].collateralAmount;
     }
 
-    partiesInfo[msg.sender].lastSettingSignedBy = _settingId;
+    partiesInfo[msg.sender].lastSettingIdSigned = _settingId;
     emit Signed(msg.sender, _settingId);
   }
 
@@ -106,11 +106,14 @@ contract UnbreakableVow {
     require (state != UnbreakableVowState.ACTIVE, "ERROR_CAN_NOT_UNSTAKE_FROM_ACTIVE_VOW");
     uint256 amount = partiesInfo[msg.sender].depositedAmount;
     partiesInfo[msg.sender].collateralToken.transfer(msg.sender, amount);
+    partiesInfo[msg.sender].depositedAmount = 0;
+    partiesInfo[msg.sender].lastSettingIdSigned = 0;
   }
 
   function changeSetting(uint256 _settingId) external {
+    require (state != UnbreakableVowState.TERMINATED, "ERROR_CAN_NOT_CHANGE_TERMINATED_VOW");
     for (uint256 i = 0; i < parties.length(); i++) {
-      require (partiesInfo[parties.at(i)].lastSettingSignedBy == _settingId, "ERROR_NOT_ALL_PARTIES_SIGNED");
+      require (partiesInfo[parties.at(i)].lastSettingIdSigned == _settingId, "ERROR_NOT_ALL_PARTIES_SIGNED");
     }
     currentSettingId = _settingId;
     state = UnbreakableVowState.ACTIVE;
@@ -143,12 +146,27 @@ contract UnbreakableVow {
     return getSetting(currentSettingId);
   }
 
-  function getParties() external view returns (address[] memory){
-    address[] memory _parties = new address[](parties.length());
+  function getParties()
+    external
+    view
+    returns (
+      address[] memory _parties,
+      address[] memory _collateralTokens,
+      uint256[] memory _collateralAmounts,
+      uint256[] memory _depositedAmounts
+    )
+  {
+    _parties = new address[](parties.length());
+    _collateralTokens = new address[](_parties.length);
+    _collateralAmounts = new uint256[](_parties.length);
+    _depositedAmounts = new uint256[](_parties.length);
     for(uint i=0; i < parties.length(); i++) {
       _parties[i] = parties.at(i);
+      Party storage party = partiesInfo[_parties[i]];
+      _collateralTokens[i] = address(party.collateralToken);
+      _collateralAmounts[i] = party.collateralAmount;
+      _depositedAmounts[i] = party.depositedAmount;
     }
-    return _parties;
   }
 
   /**
