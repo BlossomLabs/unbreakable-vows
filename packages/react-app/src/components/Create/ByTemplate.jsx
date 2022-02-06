@@ -20,7 +20,7 @@ Handlebars.registerHelper("xx", function (value) {
 });
 
 const ByTemplate = props => {
-  const { agreement, contract, readContracts, chainId } = props;
+  const { agreement, contract, readContracts } = props;
   const history = useHistory();
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
@@ -32,7 +32,6 @@ const ByTemplate = props => {
   const next = () => {
     setCurrent(current + 1);
   };
-
   const prev = () => {
     setCurrent(current - 1);
   };
