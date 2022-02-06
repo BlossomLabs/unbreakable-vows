@@ -12,21 +12,39 @@ const tokenOptionsContracts = {
   HNY: "0xb371248dd0f9e4061ccf8850e9223ca48aa7ca4b",
 };
 
-function EndlessArray({ onChange }) {
+function EndlessArray({ onChange, onTokensChange }) {
   const [val, setVal] = useState(null);
   const [arr, setArr] = useState([]);
+  const [tokensArr, setTokensArr] = useState([]);
+  const [amountsArr, setAmountsArr] = useState([]);
+  const [selectedToken, setSelectedToken] = useState(tokenOptions[0]);
+  const [amount, setAmount] = useState(0);
+  const [currentToken, setCurrentToken] = useState(null);
+  const Option = Select.Option;
+
   return (
     <div>
       {arr.map((i, k) => {
         return (
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
-            <p>{i}</p>
+            <p>{i?.substr(0, 5) + "..." + i?.substr(-4)}</p>
+            <p>{amountsArr[k]}</p>
+            <p>{_.invert(tokenOptionsContracts)[tokensArr[k]]}</p>
             <a
               onClick={() => {
                 let arrCp = arr.slice();
+                let tArrCp = tokensArr.slice();
+                let aArrCp = amountsArr.slice();
+
                 arrCp.splice(k, 1);
+                tArrCp.splice(k, 1);
+                aArrCp.splice(k, 1);
+
                 setArr(arrCp);
+                setTokensArr(tArrCp);
+                setAmountsArr(aArrCp);
                 onChange(arrCp);
+                onTokensChange({ tokens: tArrCp, amounts: aArrCp });
               }}
             >
               x
@@ -34,12 +52,34 @@ function EndlessArray({ onChange }) {
           </div>
         );
       })}
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <Input placeholder={"add addresss"} onChange={i => setVal(i.target.value)} />
+      <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", flexDirection: "row", flex: 0.5 }}>
+          <Input placeholder={"add addresss"} onChange={i => setVal(i.target.value)} />
+        </div>
+        <div style={{ flex: 0.5 }}>
+          <InputNumber
+            placeholder="amount"
+            onChange={a => {
+              setAmount(a);
+              setCurrentToken(tokenOptionsContracts[selectedToken]);
+            }}
+          />
+          <Select defaultValue={selectedToken} style={{ width: 120 }} onChange={i => setSelectedToken(i)}>
+            {tokenOptions.map(i => {
+              return <Option value={i}>{i}</Option>;
+            })}
+          </Select>
+        </div>
         <Button
-          onClick={() => {
+          onClick={async () => {
             setArr([...arr, val]);
-            onChange([...arr, val]);
+            setTokensArr([...tokensArr, tokenOptionsContracts[selectedToken]]);
+            setAmountsArr([...amountsArr, amount]);
+            await onTokensChange({
+              parties: [...arr, val],
+              tokens: [...tokensArr, tokenOptionsContracts[selectedToken]],
+              amounts: [...amountsArr, amount],
+            });
           }}
         >
           +
@@ -121,7 +161,7 @@ function SectionParser(props) {
       case "date":
         return <DatePicker onChange={i => setInputs(key, i)} />;
       case "endlessArray":
-        return <EndlessArray onChange={i => setInputs(key, i)} />;
+        return <EndlessArray onChange={i => setInputs(key, i)} onTokensChange={i => setInputs("uVowsCollateral", i)} />;
       case "tokenAmount":
         return <TokenAmount onChange={i => setInputs(key, i)} />;
       default:

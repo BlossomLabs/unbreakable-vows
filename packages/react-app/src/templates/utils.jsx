@@ -9,13 +9,13 @@ const uVowsFinalStep = {
       type: "text",
     },
     uVowsParties: {
-      text: "Set the addresses of all parties involved",
+      text: "Set the addresses of all parties involved and their collateral",
       type: "endlessArray",
     },
-    uVowsCollateral: {
-      text: "Set the collateral",
-      type: "tokenAmount",
-    },
+    // uVowsCollateral: {
+    //   text: "Set the collateral",
+    //   type: "tokenAmount",
+    // },
     uVowSuperfluid: {
       text: "Will this agreement have a SuperFluid Flow",
       type: ["Yes", "No"],

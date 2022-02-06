@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { ethers, utils } from "ethers";
+import { utils } from "ethers";
+import { useHistory } from "react-router-dom";
 import { Steps, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
@@ -19,6 +20,7 @@ Handlebars.registerHelper("xx", function (value) {
 });
 
 const ByTemplate = ({ agreement, contract, readContracts }) => {
+  const history = useHistory();
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
   const [current, setCurrent] = useState(0);
@@ -47,23 +49,21 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
         setMdText(text);
       });
   };
-  console.log({ variables });
   const createAndSign = async () => {
     const { url, blob } = createMDFile(templateReady);
     const ipfsHash = await pinFileToIPFS("u_vow.md", blob);
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
     // Validate main inputs
-    // if(!variables?.uVowTitle || !variables?.uVowsParties )
-    const { uVowsParties, uVowTitle, uVowsCollateral } = variables;
-    console.log({ contract, hex, readContracts, arb: readContracts.Arbitrator.address });
+    if (!hex || !variables?.uVowTitle || !variables?.uVowsCollateral) return message.error("Complete all fields");
+    const { uVowTitle, uVowsCollateral } = variables;
     const tx = await contract.createUnbreakableVow(
       readContracts.Arbitrator.address,
       uVowTitle,
       hex,
-      uVowsParties,
-      uVowsParties.map(party => uVowsCollateral.tokenAddress),
-      uVowsParties.map(party => ethers.utils.parseUnits(uVowsCollateral?.amount?.toString(), 18)),
+      uVowsCollateral?.parties,
+      uVowsCollateral?.tokens,
+      uVowsCollateral?.amounts,
     );
 
     const txDone = await tx.wait();
@@ -71,6 +71,10 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
     console.log({ hex, txDone, tx });
 
     message.success("Processing complete!");
+
+    const event = txDone?.events?.find(i => i?.event === "NewUnbreakableVow");
+    const vowHash = event?.args?.vow;
+    history.push(`/vow/${vowHash}`);
   };
 
   useEffect(() => {

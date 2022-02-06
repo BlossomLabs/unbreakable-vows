@@ -42,6 +42,13 @@ const columns = [
     title: "Parties",
     dataIndex: "parties",
     key: "parties",
+    render: parties => (
+      <div style={{ display: "flex", flexDirection: "column" }}>
+        {parties.map(p => {
+          return <p>{p}</p>;
+        })}
+      </div>
+    ),
   },
   //   {
   //     title: "Arbitrator",

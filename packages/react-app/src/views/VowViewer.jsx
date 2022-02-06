@@ -58,7 +58,7 @@ function VowViewer({ readContracts, provider, chainId }) {
   useEffect(() => {
     getVow();
   }, [readContracts, chainId, vowHash]);
-
+  if (!vow) return null;
   return (
     <div style={{ alignItems: "center", margin: "auto" }}>
       <div
@@ -91,20 +91,22 @@ function VowViewer({ readContracts, provider, chainId }) {
           }}
         >
           <div style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <h2 style={{ borderRight: "1px solid black", paddingRight: 20, marginRight: 20 }}>
+            <h1 style={{ borderRight: "1px solid black", paddingRight: 20, marginRight: 20 }}>
               {vow?.title || "Untitled Vow"}
-            </h2>
-            <h4>{formatState(vow?.state)}</h4>
+            </h1>
+            <h2>{formatState(vow?.state)}</h2>
           </div>
-          <div style={{ marginBottom: 32 }}>
-            <h4>Parties</h4>
-            <div>
-              {vow?.parties?.map(i => {
-                return <p>{i}</p>;
-              })}
+          <div style={{ height: "450px", overflow: "scroll" }}>
+            <div style={{ marginBottom: 32 }}>
+              <h2 style={{ marginTop: 10, fontWeight: "bold" }}>Parties</h2>
+              <div>
+                {vow?.parties?.map(i => {
+                  return <p>{i}</p>;
+                })}
+              </div>
             </div>
+            <ReactMarkdown>{vow?.markdown}</ReactMarkdown>
           </div>
-          <ReactMarkdown>{vow?.markdown}</ReactMarkdown>
         </div>
       </div>
     </div>
