@@ -37,7 +37,7 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
         state,
         signed,
         collateralTokens,
-        collateralAmounts,
+        collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
         hash: vowHash,
         arbitrator: formatAddress(stngs.arbitrator),
         content: docURL,

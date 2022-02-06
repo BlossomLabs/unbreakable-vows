@@ -65,16 +65,15 @@ function Vows({ readContracts, provider, address, chainId }) {
     const vows = await vowsHashes.map(async (i, k) => {
       const instance = new ethers.Contract(i, ABI, provider);
       const stngs = await instance.getCurrentSetting();
-      const [parties, signed, collateralTokens, collateralAmounts, depositedAmounts] = await instance.getParties();
+      const [parties, signed, collateralTokens, collateralAmounts] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
-
       return {
         parties: [...parties],
         signed,
         collateralTokens,
         collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
-        depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
+        // depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
         state,
         hash: i,
         arbitrator: formatAddress(stngs.arbitrator),
@@ -94,7 +93,7 @@ function Vows({ readContracts, provider, address, chainId }) {
     const filter = contract.filters.NewUnbreakableVow(null, address);
     const fromBlock = await provider.getBlockNumber().then(b => b - 10000);
     const toBlock = "latest";
-
+    console.log({ contract });
     contract.queryFilter(filter, fromBlock, toBlock).then(logs => {
       getVows(logs);
     });

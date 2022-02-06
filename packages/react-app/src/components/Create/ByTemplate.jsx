@@ -66,7 +66,8 @@ const ByTemplate = props => {
     if (!hex || !variables?.uVowTitle || !variables?.uVowsCollateral) return message.error("Complete all fields");
     const { uVowTitle, uVowsCollateral } = variables;
     const tx = await contract.createUnbreakableVow(
-      readContracts.Arbitrator.address,
+      // readContracts.Arbitrator.address,
+      uVowsCollateral?.tokens[0],
       uVowTitle,
       hex,
       uVowsCollateral?.parties,

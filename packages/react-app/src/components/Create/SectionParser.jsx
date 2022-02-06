@@ -127,8 +127,8 @@ function SectionParser(props) {
   const [tokenOptionsContracts, setTokenOptionsContracts] = useState(null);
 
   useEffect(() => {
-    setTokenOptions(chainId === 31337 ? mumbaiTokenOptions : testTokenOptions);
-    setTokenOptionsContracts(chainId === 31337 ? mumbaiTokenOptionsContracts : testTokenOptionsContracts);
+    setTokenOptions(chainId === 80001 ? mumbaiTokenOptions : testTokenOptions);
+    setTokenOptionsContracts(chainId === 80001 ? mumbaiTokenOptionsContracts : testTokenOptionsContracts);
   }, [chainId]);
 
   const validateCondition = condition => {

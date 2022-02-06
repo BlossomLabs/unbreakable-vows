@@ -5,6 +5,7 @@
       "chainId": "80001",
       "contracts": {
         "UnbreakableVow": {
+          "address": "0x19c6d80a2617bd1f444133d7e997864d8731cc85",
           "abi": [
             {
               "inputs": [
