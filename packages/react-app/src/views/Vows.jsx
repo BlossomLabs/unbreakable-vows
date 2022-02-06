@@ -64,10 +64,9 @@ const columns = [
 ];
 
 function Vows({ readContracts, provider, address, chainId }) {
-  const [events, setEvents] = useState(null);
   const [vows, setVows] = useState(null);
 
-  const getVows = logs => {
+  const getVows = async logs => {
     const dContracts = deployedContracts[chainId];
     const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
 
@@ -76,28 +75,29 @@ function Vows({ readContracts, provider, address, chainId }) {
     logs?.map(i => {
       vowsHashes.push(i?.args["vow"]);
     });
-
     // Get instances
-    vowsHashes.map(async (i, k) => {
+    const vows = await vowsHashes.map(async (i, k) => {
       const instance = new ethers.Contract(i, ABI, provider);
       const stngs = await instance.getCurrentSetting();
       const [parties, collateralTokens, collateralAmounts, depositedAmounts] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
-      setVows({
-        ...vows,
-        [i]: {
-          parties: [...parties],
-          collateralTokens,
-          collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
-          depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
-          state,
-          hash: i,
-          arbitrator: formatAddress(stngs.arbitrator),
-          content: `https://gateway.pinata.cloud/ipfs/${ipfs.split(":")[1] || ""}`,
-          title: stngs.title,
-        },
-      });
+
+      return {
+        parties: [...parties],
+        collateralTokens,
+        collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
+        depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
+        state,
+        hash: i,
+        arbitrator: formatAddress(stngs.arbitrator),
+        content: `https://gateway.pinata.cloud/ipfs/${ipfs.split(":")[1] || ""}`,
+        title: stngs.title,
+      };
+    });
+    Promise.all(vows).then(results => {
+      console.log({ results });
+      setVows(results);
     });
   };
 
@@ -109,17 +109,15 @@ function Vows({ readContracts, provider, address, chainId }) {
     const toBlock = "latest";
 
     contract.queryFilter(filter, fromBlock, toBlock).then(logs => {
-      setEvents(logs);
       getVows(logs);
     });
   };
 
   useEffect(() => {
     getEvents();
-  }, [readContracts, chainId]);
+  }, [chainId, provider, address]);
 
   const dataSource = vows && Object.values(vows);
-  console.log({ vows, dataSource });
 
   return <div style={{ margin: "20px" }}>{dataSource && <Table dataSource={dataSource} columns={columns} />}</div>;
 }
