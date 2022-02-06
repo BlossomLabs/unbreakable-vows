@@ -1,5 +1,79 @@
 {
-  "name": "Independent Contractor agreement",
-  "description": " is often used when an individual or business is hired to complete a specific project or task on a short term basis.",
-  "form": {}
-}
+	"name": "Independent Contractor agreement",
+	"description": " is often used when an individual or business is hired to complete a specific project or task on a short term basis.",
+	"form": {
+		"Information of involved parties": {
+			"clientType": {
+				"text": "Is the client an individual or an organization?",
+				"type": ["Individual", "Organization"]
+			},
+			"individualClientName": {
+				"text": "What is the individual client name?",
+				"type": "text",
+				"condition": "clientType==1"
+			},
+			"individualClientAddress": {
+				"text": "Ethereum address of the client",
+				"type": "address",
+				"condition": "clientType==1"
+			},
+			"organizationClientName": {
+				"text": "What is the organization client name?",
+				"type": "text",
+				"condition": "clientType==2"
+			},
+			"organizationClientAddress": {
+				"text": "Ethereum address of the client",
+				"type": "address"
+			},
+			"contractorName": {
+				"text": "Who is being hired to perform services?",
+				"type": "text"
+			},
+			"contractorAddress": {
+				"text": "Ethereum address of the client",
+				"type": "address"
+			}
+    },
+			"Independent contractor's services": {
+
+			},
+			"Compensation": {
+        "compensationType": {
+          "text": "How will the independent contractor be paid?",
+          "type": ["A fixed wage", "A set fee", "After completing certain milestiones", "Other"]
+        }
+			},
+			"Payment schedule": {
+        "paymentSchedule": {
+          "text": "When will the payments be made?",
+          "type": [
+            "Every week",
+            "Every month",
+            "After independent contractor sends an invoice"
+          ]
+        }
+			},
+			"Expenses and Reimbursement": {
+
+			},
+			"Commencement of Services": {
+
+			},
+			"Termination of Agreement": {
+
+			},
+			"Confidentiality": {
+
+			},
+			"Insurance": {
+
+			},
+			"Disputes": {
+
+			},
+			"Agreement Date": {
+
+			}
+		}
+	}
