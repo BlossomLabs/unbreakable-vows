@@ -51,7 +51,7 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
   };
   const createAndSign = async () => {
     const { url, blob } = createMDFile(templateReady);
-    const ipfsHash = await pinFileToIPFS("u_vow.md", blob);
+    const ipfsHash = await pinFileToIPFS(`${variables?.uVowTitle}.md`, blob);
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
     // Validate main inputs
