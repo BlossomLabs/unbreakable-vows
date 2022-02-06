@@ -151,18 +151,21 @@ contract UnbreakableVow {
     view
     returns (
       address[] memory _parties,
+      bool[] memory _signed,
       address[] memory _collateralTokens,
       uint256[] memory _collateralAmounts,
       uint256[] memory _depositedAmounts
     )
   {
     _parties = new address[](parties.length());
+    _signed = new bool[](_parties.length);
     _collateralTokens = new address[](_parties.length);
     _collateralAmounts = new uint256[](_parties.length);
     _depositedAmounts = new uint256[](_parties.length);
     for(uint i=0; i < parties.length(); i++) {
       _parties[i] = parties.at(i);
       Party storage party = partiesInfo[_parties[i]];
+      _signed[i] = party.lastSettingIdSigned != 0; 
       _collateralTokens[i] = address(party.collateralToken);
       _collateralAmounts[i] = party.collateralAmount;
       _depositedAmounts[i] = party.depositedAmount;
