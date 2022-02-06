@@ -6,9 +6,9 @@ import { Radio } from "antd";
 
 const modes = ["custom", "employment"];
 
-function Create() {
+function Create({ writeContracts, readContracts }) {
   const [mode, setMode] = useState("employment");
-
+  const { UnbreakableVowFactory } = writeContracts;
   const onRadioChange = e => {
     setMode(e.target.value);
   };
@@ -35,7 +35,11 @@ function Create() {
       }
       {/* <ReactMarkdown style={{ margin: 32 }}>{templateReady}</ReactMarkdown> */}
 
-      {mode === "custom" ? <ByTemplate agreement={CustomAgreement} /> : <ByTemplate agreement={EmploymentAgreement} />}
+      {mode === "custom" ? (
+        <ByTemplate agreement={CustomAgreement} contract={UnbreakableVowFactory} readContracts={readContracts} />
+      ) : (
+        <ByTemplate agreement={EmploymentAgreement} contract={UnbreakableVowFactory} readContracts={readContracts} />
+      )}
     </div>
   );
 }

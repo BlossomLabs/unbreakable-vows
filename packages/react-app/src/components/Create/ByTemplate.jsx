@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { utils } from "ethers";
+import { ethers, utils } from "ethers";
 import { Steps, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
@@ -18,7 +18,7 @@ Handlebars.registerHelper("xx", function (value) {
   return value || "__________";
 });
 
-const ByTemplate = ({ agreement }) => {
+const ByTemplate = ({ agreement, contract, readContracts }) => {
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
   const [current, setCurrent] = useState(0);
@@ -48,14 +48,30 @@ const ByTemplate = ({ agreement }) => {
         setMdText(text);
       });
   };
-
-  const sign = async () => {
+  console.log({ variables });
+  const createAndSign = async () => {
     const { url, blob } = createMDFile(templateReady);
     const ipfsHash = await pinFileToIPFS("u_vow.md", blob);
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
+    // Validate main inputs
+    // if(!variables?.uVowTitle || !variables?.uVowsParties )
+    const { uVowsParties, uVowTitle, uVowsCollateral } = variables;
+    console.log({ contract, hex, readContracts, arb: readContracts.Arbitrator.address });
+    const tx = await contract.createUnbreakableVow(
+      readContracts.Arbitrator.address,
+      uVowTitle,
+      hex,
+      uVowsParties,
+      uVowsParties.map(party => uVowsCollateral.tokenAddress),
+      uVowsParties.map(party => ethers.utils.parseUnits(uVowsCollateral?.amount?.toString(), 18)),
+    );
+
+    const txDone = await tx.wait();
+
+    console.log({ hex, txDone, tx });
+
     message.success("Processing complete!");
-    console.log({ ipfsHash, bytes, hex });
   };
 
   useEffect(() => {
@@ -87,7 +103,7 @@ const ByTemplate = ({ agreement }) => {
               </Button>
             )}
             {current === sections.length - 1 && (
-              <Button type="primary" onClick={sign}>
+              <Button type="primary" onClick={createAndSign}>
                 Done
               </Button>
             )}

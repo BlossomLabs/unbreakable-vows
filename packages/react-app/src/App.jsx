@@ -300,7 +300,7 @@ function App(props) {
             />
           </Route>
           <Route exact path="/create">
-            <Create yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+            <Create yourLocalBalance={yourLocalBalance} writeContracts={writeContracts} readContracts={readContracts} />
           </Route>
           <Route exact path="/debug">
             {/*
@@ -426,9 +426,9 @@ function App(props) {
             blockExplorer={blockExplorer}
           />
         </div>
-        {/* {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
+        {yourLocalBalance.lte(ethers.BigNumber.from("0")) && (
           <FaucetHint localProvider={localProvider} targetNetwork={targetNetwork} address={address} />
-        )} */}
+        )}
       </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}

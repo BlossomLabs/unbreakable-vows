@@ -143,7 +143,7 @@ contract UnbreakableVow {
     view
     returns (IArbitrator arbitrator, string memory title, bytes memory content)
   {
-    return getSetting(currentSettingId);
+    return getSetting(currentSettingId == 0 ? 1 : currentSettingId);
   }
 
   function getParties()

@@ -33,6 +33,7 @@ function VowViewer({ readContracts, provider, chainId }) {
       const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
       const instance = new ethers.Contract(vowHash, ABI, provider);
       const stngs = await instance.getCurrentSetting();
+      console.log({ stngs });
       const [parties] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
@@ -53,7 +54,7 @@ function VowViewer({ readContracts, provider, chainId }) {
       console.log({ error });
     }
   };
-
+  console.log({ vow });
   useEffect(() => {
     getVow();
   }, [readContracts, chainId, vowHash]);

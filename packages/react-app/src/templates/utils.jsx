@@ -4,6 +4,10 @@ import FormData from "form-data";
 
 const uVowsFinalStep = {
   "Final Step": {
+    uVowTitle: {
+      text: "What's the title of this vow?",
+      type: "text",
+    },
     uVowsParties: {
       text: "Set the addresses of all parties involved",
       type: "endlessArray",

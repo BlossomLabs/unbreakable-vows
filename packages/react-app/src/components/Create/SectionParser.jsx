@@ -6,6 +6,11 @@ import "./styles.css";
 import { useState } from "react";
 
 const tokenOptions = ["DAI", "MATIC", "HNY"];
+const tokenOptionsContracts = {
+  DAI: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
+  MATIC: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
+  HNY: "0xb371248dd0f9e4061ccf8850e9223ca48aa7ca4b",
+};
 
 function EndlessArray({ onChange }) {
   const [val, setVal] = useState(null);
@@ -62,6 +67,7 @@ function TokenAmount({ onChange }) {
           onChange({
             symbol: selectedToken,
             amount: a,
+            tokenAddress: tokenOptionsContracts[selectedToken],
           });
         }}
       />
