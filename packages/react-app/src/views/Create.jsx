@@ -8,7 +8,7 @@ import { Radio } from "antd";
 const modes = ["custom", "employment", "independent-contractor"];
 
 function Create(props) {
-  const { writeContracts, readContracts, chainId } = props;
+  const { writeContracts } = props;
   const [mode, setMode] = useState("employment");
   const { UnbreakableVowFactory } = writeContracts;
   const onRadioChange = e => {

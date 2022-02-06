@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { utils } from "ethers";
 import { Input, DatePicker, InputNumber, Radio, Button, Select } from "antd";
 import _ from "underscore";
 import "./styles.css";
-import { useState } from "react";
 
 const testTokenOptions = ["DAI", "MATIC", "HNY"];
 const testTokenOptionsContracts = {
@@ -19,7 +18,7 @@ const mumbaiTokenOptionsContracts = {
   TST: "0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e",
 };
 
-function EndlessArray({ onChange, onTokensChange, chainId, tokenOptions, tokenOptionsContracts }) {
+function EndlessArray({ onChange, onTokensChange, tokenOptions, tokenOptionsContracts }) {
   const [val, setVal] = useState(null);
   const [arr, setArr] = useState([]);
   const [tokensArr, setTokensArr] = useState([]);
@@ -28,8 +27,6 @@ function EndlessArray({ onChange, onTokensChange, chainId, tokenOptions, tokenOp
   const [amount, setAmount] = useState(0);
   const [currentToken, setCurrentToken] = useState(null);
   const Option = Select.Option;
-
-  console.log({ chainId });
 
   return (
     <div>
@@ -126,9 +123,13 @@ function TokenAmount({ onChange, tokenOptions, tokenOptionsContracts }) {
 }
 function SectionParser(props) {
   const { section, variables, setInputs, chainId } = props;
+  const [tokenOptions, setTokenOptions] = useState(null);
+  const [tokenOptionsContracts, setTokenOptionsContracts] = useState(null);
 
-  const tokenOptions = chainId === 31337 ? mumbaiTokenOptions : testTokenOptions;
-  const tokenOptionsContracts = chainId === 31337 ? mumbaiTokenOptionsContracts : testTokenOptionsContracts;
+  useEffect(() => {
+    setTokenOptions(chainId === 31337 ? mumbaiTokenOptions : testTokenOptions);
+    setTokenOptionsContracts(chainId === 31337 ? mumbaiTokenOptionsContracts : testTokenOptionsContracts);
+  }, [chainId]);
 
   const validateCondition = condition => {
     const a = condition?.split("==")[0];

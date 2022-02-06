@@ -19,7 +19,8 @@ Handlebars.registerHelper("xx", function (value) {
   return value || "__________";
 });
 
-const ByTemplate = ({ agreement, contract, readContracts, chainId }) => {
+const ByTemplate = props => {
+  const { agreement, contract, readContracts, chainId } = props;
   const history = useHistory();
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
@@ -96,7 +97,7 @@ const ByTemplate = ({ agreement, contract, readContracts, chainId }) => {
           ))}
         </Steps>
         <div className="steps-content">
-          {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} chainId={chainId} />}
+          {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} {...props} />}
           <div className="steps-action">
             {current < sections.length - 1 && (
               <Button type="primary" onClick={() => next()}>

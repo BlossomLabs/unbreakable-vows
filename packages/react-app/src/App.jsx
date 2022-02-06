@@ -306,6 +306,7 @@ function App(props) {
               writeContracts={writeContracts}
               readContracts={readContracts}
               chainId={selectedChainId}
+              userSigner={userSigner}
             />
           </Route>
           <Route exact path="/debug">
