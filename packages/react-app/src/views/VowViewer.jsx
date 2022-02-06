@@ -57,7 +57,6 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
   const sign = async signed => {
     const collateral = new ethers.Contract(userCollateral?.token, erc20Abi, userSigner);
     await collateral.approve(address, userCollateral?.amount);
-    console.log({ contract });
     if (!signed) {
       await contract.sign(1, { gasLimit: 10000000 });
     } else {
@@ -66,7 +65,10 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
     getVow();
   };
 
-  const terminate = async () => {};
+  const terminate = async offersTermination => {
+    await contract.terminate(offersTermination, { gasLimit: 10000000 });
+    getVow();
+  };
 
   console.log({ vow });
 
@@ -76,7 +78,8 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
 
   if (!vow) return null;
 
-  const userSigned = vow?.signed[_.invert(vow?.parties)[address]];
+  const userSigned = vow?.signed[_.invert(vow?.parties)[address]] != 0;
+  const userOffersTermination = vow?.signed[_.invert(vow?.parties)[address]] == 2;
 
   return (
     <div style={{ alignItems: "center", margin: "auto" }}>
@@ -102,8 +105,14 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
           </Button>
         )}
         {vow?.state === 1 && (
-          <Button danger={true} type="primary" size="small" style={{ width: "100px" }} onClick={terminate}>
-            TERMINATE
+          <Button
+            danger={true}
+            type="primary"
+            size="small"
+            style={{ minWidth: "100px" }}
+            onClick={() => terminate(!userOffersTermination)}
+          >
+            {!userOffersTermination ? "OFFER TERMINATION" : "RETRACT TERMINATION OFFERING"}
           </Button>
         )}
         <div

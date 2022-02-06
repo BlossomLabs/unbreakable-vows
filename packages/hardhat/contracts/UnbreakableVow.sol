@@ -18,6 +18,8 @@ contract UnbreakableVow {
   event SettingChanged(uint256 settingId);
 
   enum UnbreakableVowState { UNSIGNED, ACTIVE, TERMINATED }
+  enum UserState { UNSIGNED, SIGNED, OFFERS_TERMINATION }
+
 
   struct Setting {
     IArbitrator arbitrator;
@@ -30,6 +32,7 @@ contract UnbreakableVow {
     IERC20 collateralToken;
     uint256 collateralAmount;
     uint256 depositedAmount;
+    bool offerTermination;
   }
 
   UnbreakableVowState public state = UnbreakableVowState.UNSIGNED;
@@ -56,7 +59,7 @@ contract UnbreakableVow {
   ) {
     for (uint i = 0; i < _parties.length; i++) {
       parties.add(_parties[i]);
-      partiesInfo[_parties[i]] = Party(0, _collateralTokens[i], _collateralAmounts[i], 0);
+      partiesInfo[_parties[i]] = Party(0, _collateralTokens[i], _collateralAmounts[i], 0, false);
     }
     proposeSetting(_arbitrator, _title, _content);
   }
@@ -111,6 +114,12 @@ contract UnbreakableVow {
     partiesInfo[msg.sender].lastSettingIdSigned = 0;
   }
 
+  function terminate(bool offersTermination) public{
+    require (state == UnbreakableVowState.ACTIVE, "ERROR_CAN_NOT_TERMINATE_UNACTIVE_VOW");
+    partiesInfo[msg.sender].offerTermination = offersTermination;
+    _changeSettingIfPossible(0);
+  }
+
   /**
    * @dev Tell the information related to an agreement setting
    * @param _settingId Identification number of the agreement setting
@@ -142,21 +151,21 @@ contract UnbreakableVow {
     view
     returns (
       address[] memory _parties,
-      bool[] memory _signed,
+      UserState[] memory _signed,
       address[] memory _collateralTokens,
       uint256[] memory _collateralAmounts,
       uint256[] memory _depositedAmounts
     )
   {
     _parties = new address[](parties.length());
-    _signed = new bool[](_parties.length);
+    _signed = new UserState[](_parties.length);
     _collateralTokens = new address[](_parties.length);
     _collateralAmounts = new uint256[](_parties.length);
     _depositedAmounts = new uint256[](_parties.length);
     for(uint i=0; i < parties.length(); i++) {
       _parties[i] = parties.at(i);
       Party storage party = partiesInfo[_parties[i]];
-      _signed[i] = party.lastSettingIdSigned != 0; 
+      _signed[i] = party.offerTermination ? UserState.OFFERS_TERMINATION : party.lastSettingIdSigned != 0? UserState.SIGNED : UserState.UNSIGNED; 
       _collateralTokens[i] = address(party.collateralToken);
       _collateralAmounts[i] = party.collateralAmount;
       _depositedAmounts[i] = party.depositedAmount;
@@ -198,13 +207,22 @@ contract UnbreakableVow {
 
 
   function _changeSettingIfPossible(uint256 _settingId) private {
-    for (uint256 i = 0; i < parties.length(); i++) {
-      if (partiesInfo[parties.at(i)].lastSettingIdSigned != _settingId) {
+    if(_settingId != 0) {
+      for (uint256 i = 0; i < parties.length(); i++) {
+        if (partiesInfo[parties.at(i)].lastSettingIdSigned != _settingId) {
          return;
+        }
       }
+      currentSettingId = _settingId;
+      state = UnbreakableVowState.ACTIVE;
+      emit SettingChanged(_settingId);
+    } else {
+      for (uint256 i = 0; i < parties.length(); i++) {
+        if (!partiesInfo[parties.at(i)].offerTermination) {
+          return;
+        }
+      }
+      state = UnbreakableVowState.TERMINATED;
     }
-    currentSettingId = _settingId;
-    state = UnbreakableVowState.ACTIVE;
-    emit SettingChanged(_settingId);
   }
 }
