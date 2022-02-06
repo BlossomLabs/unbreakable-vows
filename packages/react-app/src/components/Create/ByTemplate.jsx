@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { utils } from "ethers";
 import { useHistory } from "react-router-dom";
 import { Steps, Button, message } from "antd";
+import { startFlow } from "../../superfluid";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
 import { prepareQuesions, createMDFile, pinFileToIPFS } from "../../templates/utils";
@@ -29,7 +30,7 @@ Handlebars.registerHelper("date", function (date) {
 });
 
 const ByTemplate = props => {
-  const { agreement, contract, readContracts } = props;
+  const { agreement, contract, userSigner, readContracts } = props;
   const history = useHistory();
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
@@ -62,9 +63,15 @@ const ByTemplate = props => {
     const ipfsHash = await pinFileToIPFS(`${variables?.uVowTitle}.md`, blob);
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
+    const { uVowTitle, uVowsCollateral, uVowSuperfluid, uVowSuperfluidRecepient, uVowSuperfluidAmount } = variables;
+
+    // Check superfluid flow creation
+    if (uVowSuperfluid === 1 && uVowSuperfluidRecepient) {
+      return startFlow({ userSigner, recipient: uVowSuperfluidRecepient, amount: uVowSuperfluidAmount });
+    }
+
     // Validate main inputs
-    if (!hex || !variables?.uVowTitle || !variables?.uVowsCollateral) return message.error("Complete all fields");
-    const { uVowTitle, uVowsCollateral } = variables;
+    if (!hex || !uVowTitle || !uVowsCollateral) return message.error("Complete all fields");
     const tx = await contract.createUnbreakableVow(
       // readContracts.Arbitrator.address,
       uVowsCollateral?.tokens[0],
@@ -85,7 +92,6 @@ const ByTemplate = props => {
     const vowHash = event?.args?.vow;
     history.push(`/vow/${vowHash}`);
   };
-
   useEffect(() => {
     // Set variables
     const preparedQs = prepareQuesions(questions);
@@ -97,6 +103,9 @@ const ByTemplate = props => {
   }, [agreement]);
 
   if (!variables && !sections) return null;
+
+  console.log({ variables });
+
   return (
     <div className="bytemplate-container">
       <div className="left-bytemplate">

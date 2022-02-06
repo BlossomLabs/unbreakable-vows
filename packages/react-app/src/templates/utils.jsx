@@ -21,8 +21,8 @@ const uVowsFinalStep = {
       type: ["Yes", "No"],
     },
     uVowSuperfluidAmount: {
-      text: "How much will you pay on superfluid?",
-      type: "tokenAmount",
+      text: "How much will you pay on superfluid monthly in fDAIx?",
+      type: "number",
       condition: "uVowSuperfluid==1",
     },
     uVowSuperfluidRecepient: {
@@ -30,11 +30,11 @@ const uVowsFinalStep = {
       type: "text",
       condition: "uVowSuperfluid==1",
     },
-    uVowSuperFluidFrecuency: {
-      text: "How often will it be?",
-      type: ["Monthly", "Annual"],
-      condition: "uVowSuperfluid==1",
-    },
+    // uVowSuperFluidFrecuency: {
+    //   text: "How often will it be?",
+    //   type: ["Monthly", "Annual"],
+    //   condition: "uVowSuperfluid==1",
+    // },
   },
 };
 
