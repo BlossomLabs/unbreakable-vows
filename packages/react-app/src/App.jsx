@@ -10,7 +10,7 @@ import {
 } from "eth-hooks";
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { Redirect, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
 import {
   Account,
@@ -259,8 +259,7 @@ function App(props) {
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Switch>
           <Route exact path="/">
-            {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-            <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+            <Redirect to="/create" />
           </Route>
           <Route path="/vows">
             <Vows chainId={selectedChainId} provider={localProvider} readContracts={readContracts} address={address} />
