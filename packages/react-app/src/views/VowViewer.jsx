@@ -58,9 +58,9 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
     const collateral = new ethers.Contract(userCollateral?.token, erc20Abi, userSigner);
     await collateral.approve(address, userCollateral?.amount);
     if (!signed) {
-      await contract.sign(1, { gasLimit: 10000000 });
+      await (await contract.sign(1, { gasLimit: 10000000 })).wait();
     } else {
-      await contract.unstakeCollateral({ gasLimit: 10000000 });
+      await (await contract.unstakeCollateral({ gasLimit: 10000000 })).wait();
     }
     message.success("Processing complete!");
 
