@@ -261,12 +261,12 @@ function App(props) {
           {/* <Menu.Item key="/">
             <Link to="/">App Home</Link>
           </Menu.Item> */}
-          <Menu.Item key="/debug">
+          {/* <Menu.Item key="/debug">
             <Link to="/debug">Debug Contracts</Link>
           </Menu.Item>
           <Menu.Item key="/exampleui">
             <Link to="/exampleui">ExampleUI</Link>
-          </Menu.Item>
+          </Menu.Item> */}
           {/* <Menu.Item key="/hints">
             <Link to="/hints">Hints</Link>
           </Menu.Item>
