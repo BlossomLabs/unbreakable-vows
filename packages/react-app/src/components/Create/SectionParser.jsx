@@ -108,7 +108,7 @@ function SectionParser(props) {
         );
       case "token":
         return (
-          <Radio.Group value={key}>
+          <Radio.Group value={variables[key]}>
             {tokenOptions?.map(i => {
               return (
                 <Radio value={i} onChange={() => setInputs(key, i)}>
