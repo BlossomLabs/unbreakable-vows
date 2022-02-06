@@ -86,6 +86,7 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
       <div
         style={{
           width: "600px",
+          marginTop: 40,
           display: "flex",
           flexDirection: "column",
           alignSelf: "center",
