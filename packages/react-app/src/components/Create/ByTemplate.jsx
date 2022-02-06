@@ -8,15 +8,24 @@ import { prepareQuesions, createMDFile, pinFileToIPFS } from "../../templates/ut
 import "./styles.css";
 import _ from "underscore";
 import SectionParser from "./SectionParser";
+import moment from "moment";
 
 const { Step } = Steps;
 
 Handlebars.registerHelper("eq", function (arg1, arg2, options) {
-  return arg1 === arg2 ? options.fn(this) : options.inverse(this);
+  return arg1 === arg2 || (arg1 === null && arg2 === 1) ? options.fn(this) : options.inverse(this);
 });
 
-Handlebars.registerHelper("xx", function (value) {
-  return value || "__________";
+Handlebars.registerHelper("display", function (...args) {
+  return args.slice(0, -1).reduce((a, v) => a || v) || " __________ ";
+});
+
+Handlebars.registerHelper("option", function (...args) {
+  return args[0] ? args.slice(1, -1)[args[0] - 1] : " __________ ";
+});
+
+Handlebars.registerHelper("date", function (date) {
+  return date ? moment(date).format("LL") : " __________ ";
 });
 
 const ByTemplate = props => {
@@ -43,7 +52,7 @@ const ByTemplate = props => {
   const getTemplateReady = () => {
     fetch(agreement.template)
       .then(response => response.text())
-      .then(text => text.replace(/\{\{\*\*/g, "{{").replace(/\*\*}}/g, "}}"))
+      .then(text => text.replace(/\{\{\*\*/g, "{{display ").replace(/\*\*}}/g, "}}"))
       .then(text => {
         setMdText(text);
       });

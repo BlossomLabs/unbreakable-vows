@@ -46,6 +46,7 @@
     "handlebars": "^4.7.7",
     "ipfs-http-client": "^55.0.0",
     "isomorphic-fetch": "^3.0.0",
+    "moment": "^2.29.1",
     "node-watch": "^0.7.1",
     "postcss": "^8.2.6",
     "qrcode.react": "^1.0.0",

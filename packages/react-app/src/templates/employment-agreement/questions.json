@@ -35,7 +35,7 @@
       "employeeAddress": {
         "text": "What is the employee's Ethereum address?",
         "type": "address",
-        "condition": "employerType==2"
+        "condition": "employerType"
       }
     },
     "Type of employment": {
@@ -124,10 +124,6 @@
         "text": "How often will compensation be reviewed?",
         "type": ["Monthly", "Quaterly", "Half-year", "Annual"],
         "condition": "review==1"
-      },
-      "kpi": {
-        "text": "Which are the key performance indicators?",
-        "type": ["30% completed", "50% completed", "75% completed", "100% completed", "Other"]
       }
     },
     "Schedule and Vacations": {
@@ -135,9 +131,14 @@
         "text": "What will the employee’s work schedule be (including number of hours, specific days if any, etc.)?",
         "type": "longtext"
       },
+      "vacationExist": {
+        "text": "Will the employee have vacation periods?",
+        "type": ["Yes", "No"]
+      },
       "vacation": {
-        "text": "UNKNOWN",
-        "type": ["Days", "Weeks"]
+        "text": "Will the employer describe how employee can take vacation?",
+        "type": ["Days", "Weeks"],
+        "condition": "vacationExist==1"
       },
       "vacationDays": {
         "text": "How many days of vacation will employee receive per year?",
@@ -151,15 +152,18 @@
       },
       "rollOver": {
         "text": "If the employee does not use all of their vacation time, does it roll over to the next year?",
-        "type": ["Yes", "No"]
+        "type": ["Yes", "No"],
+        "condition": "vacationExist==1"
       },
       "vacationLimit": {
         "text": "Does the employee have a limit to how much vacation time they can roll over and stockpile?",
-        "type": ["Yes", "No"]
+        "type": ["Yes", "No"],
+        "condition": "rollOver==1"
       },
       "vacationStockpile": {
         "text": "How much vacation time can the employee roll over and stockpile before they must use it or lose it (in days)",
-        "type": "number"
+        "type": "number",
+        "condition": "vacationLimit==1"
       }
     },
     "Renovation": {
