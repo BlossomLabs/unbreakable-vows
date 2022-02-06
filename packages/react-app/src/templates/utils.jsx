@@ -3,7 +3,7 @@ import axios from "axios";
 import FormData from "form-data";
 
 const uVowsFinalStep = {
-  "Final Step": {
+  "Create Vow": {
     uVowTitle: {
       text: "What's the title of this vow?",
       type: "text",

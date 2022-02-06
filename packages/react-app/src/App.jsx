@@ -301,7 +301,12 @@ function App(props) {
             />
           </Route>
           <Route exact path="/create">
-            <Create yourLocalBalance={yourLocalBalance} writeContracts={writeContracts} readContracts={readContracts} />
+            <Create
+              yourLocalBalance={yourLocalBalance}
+              writeContracts={writeContracts}
+              readContracts={readContracts}
+              chainId={selectedChainId}
+            />
           </Route>
           <Route exact path="/debug">
             {/*

@@ -6,14 +6,20 @@ import _ from "underscore";
 import "./styles.css";
 import { useState } from "react";
 
-const tokenOptions = ["DAI", "MATIC", "HNY"];
-const tokenOptionsContracts = {
+const testTokenOptions = ["DAI", "MATIC", "HNY"];
+const testTokenOptionsContracts = {
   DAI: "0x8f3cf7ad23cd3cadbd9735aff958023239c6a063",
   MATIC: "0x0d500b1d8e8ef31e21c99d1db9a6444d3adf1270",
   HNY: "0xb371248dd0f9e4061ccf8850e9223ca48aa7ca4b",
 };
 
-function EndlessArray({ onChange, onTokensChange }) {
+const mumbaiTokenOptions = ["LINK", "TST"];
+const mumbaiTokenOptionsContracts = {
+  LINK: "0x326c977e6efc84e512bb9c30f76e30c160ed06fb",
+  TST: "0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e",
+};
+
+function EndlessArray({ onChange, onTokensChange, chainId, tokenOptions, tokenOptionsContracts }) {
   const [val, setVal] = useState(null);
   const [arr, setArr] = useState([]);
   const [tokensArr, setTokensArr] = useState([]);
@@ -22,6 +28,8 @@ function EndlessArray({ onChange, onTokensChange }) {
   const [amount, setAmount] = useState(0);
   const [currentToken, setCurrentToken] = useState(null);
   const Option = Select.Option;
+
+  console.log({ chainId });
 
   return (
     <div>
@@ -91,7 +99,7 @@ function EndlessArray({ onChange, onTokensChange }) {
   );
 }
 
-function TokenAmount({ onChange }) {
+function TokenAmount({ onChange, tokenOptions, tokenOptionsContracts }) {
   const [selectedToken, setSelectedToken] = useState(tokenOptions[0]);
   const [amount, setAmount] = useState(0);
   const Option = Select.Option;
@@ -117,7 +125,10 @@ function TokenAmount({ onChange }) {
   );
 }
 function SectionParser(props) {
-  const { section, variables, setInputs } = props;
+  const { section, variables, setInputs, chainId } = props;
+
+  const tokenOptions = chainId === 31337 ? mumbaiTokenOptions : testTokenOptions;
+  const tokenOptionsContracts = chainId === 31337 ? mumbaiTokenOptionsContracts : testTokenOptionsContracts;
 
   const validateCondition = condition => {
     const a = condition?.split("==")[0];
@@ -163,9 +174,22 @@ function SectionParser(props) {
       case "date":
         return <DatePicker onChange={i => setInputs(key, i)} />;
       case "endlessArray":
-        return <EndlessArray onChange={i => setInputs(key, i)} onTokensChange={i => setInputs("uVowsCollateral", i)} />;
+        return (
+          <EndlessArray
+            onChange={i => setInputs(key, i)}
+            onTokensChange={i => setInputs("uVowsCollateral", i)}
+            tokenOptions={tokenOptions}
+            tokenOptionsContracts={tokenOptionsContracts}
+          />
+        );
       case "tokenAmount":
-        return <TokenAmount onChange={i => setInputs(key, i)} />;
+        return (
+          <TokenAmount
+            onChange={i => setInputs(key, i)}
+            tokenOptions={tokenOptions}
+            tokenOptionsContracts={tokenOptionsContracts}
+          />
+        );
       default:
         return null;
     }

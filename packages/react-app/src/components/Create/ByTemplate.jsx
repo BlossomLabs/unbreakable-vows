@@ -19,7 +19,7 @@ Handlebars.registerHelper("xx", function (value) {
   return value || "__________";
 });
 
-const ByTemplate = ({ agreement, contract, readContracts }) => {
+const ByTemplate = ({ agreement, contract, readContracts, chainId }) => {
   const history = useHistory();
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
@@ -28,7 +28,6 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
   const questions = agreement.questions;
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
-
   const next = () => {
     setCurrent(current + 1);
   };
@@ -97,7 +96,7 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
           ))}
         </Steps>
         <div className="steps-content">
-          {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} />}
+          {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} chainId={chainId} />}
           <div className="steps-action">
             {current < sections.length - 1 && (
               <Button type="primary" onClick={() => next()}>
