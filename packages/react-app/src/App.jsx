@@ -257,32 +257,6 @@ function App(props) {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <Menu selectedKeys={[location.pathname]} mode="horizontal">
-          {/* <Menu.Item key="/">
-            <Link to="/">App Home</Link>
-          </Menu.Item> */}
-          {/* <Menu.Item key="/debug">
-            <Link to="/debug">Debug Contracts</Link>
-          </Menu.Item>
-          <Menu.Item key="/exampleui">
-            <Link to="/exampleui">ExampleUI</Link>
-          </Menu.Item> */}
-          {/* <Menu.Item key="/hints">
-            <Link to="/hints">Hints</Link>
-          </Menu.Item>
-          <Menu.Item key="/mainnetdai">
-            <Link to="/mainnetdai">Mainnet DAI</Link>
-          </Menu.Item>
-          <Menu.Item key="/subgraph">
-            <Link to="/subgraph">Subgraph</Link>
-          </Menu.Item> */}
-          <Menu.Item key="/create">
-            <Link to="/create">Create Vow</Link>
-          </Menu.Item>
-          <Menu.Item key="/vows">
-            <Link to="/vows">Vows</Link>
-          </Menu.Item>
-        </Menu>
         <Switch>
           <Route exact path="/">
             {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
