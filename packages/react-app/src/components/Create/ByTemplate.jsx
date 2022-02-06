@@ -88,7 +88,6 @@ const ByTemplate = ({ agreement, contract, readContracts }) => {
   }, [agreement]);
 
   if (!variables && !sections) return null;
-
   return (
     <div className="bytemplate-container">
       <div className="left-bytemplate">

@@ -1,29 +1,23 @@
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
 import axios from "axios";
-import { ethers } from "ethers";
+import { ethers, utils } from "ethers";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import deployedContracts from "../contracts/hardhat_contracts.json";
 import { Button } from "antd";
+import { formatAddress, formatState } from "../templates/utils";
 
-const formatAddress = str => {
-  return str?.substr(0, 5) + "..." + str?.substr(-4);
-};
+const erc20Abi = [
+  "function balanceOf(address owner) view returns (uint256)",
+  "function approve(address _spender, uint256 _value) public returns (bool success)",
+  "function allowance(address _owner, address _spender) public view returns (uint256 remaining)",
+];
 
-const formatState = st => {
-  switch (st) {
-    case 0:
-      return "Unsigned 📝";
-    case 1:
-      return "Active 💍";
-    case 2:
-      return "Terminated 🏁";
-  }
-};
-
-function VowViewer({ readContracts, provider, chainId }) {
+function VowViewer({ readContracts, userSigner, chainId, address }) {
   const [vow, setVow] = useState(null);
+  const [contract, setContract] = useState(null);
+  const [userCollateral, setUserCollateral] = useState(null);
   const { vowHash } = useParams();
 
   const getVow = async () => {
@@ -31,34 +25,59 @@ function VowViewer({ readContracts, provider, chainId }) {
       if (_.isEmpty(readContracts) || !chainId || !vowHash) return null;
       const dContracts = deployedContracts[chainId];
       const ABI = dContracts[Object.keys(dContracts)[0]].contracts.UnbreakableVow.abi;
-      const instance = new ethers.Contract(vowHash, ABI, provider);
+      const instance = new ethers.Contract(vowHash, ABI, userSigner);
       const stngs = await instance.getCurrentSetting();
-      console.log({ stngs });
-      const [parties] = await instance.getParties();
+      const [parties, signed, collateralTokens, collateralAmounts] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
-      const docURL = `https://gateway.pinata.cloud/ipfs/${
-        ipfs.split(":")[1] || "QmXDAc25vFHdxCkhqaXECGp1WVXYZgnQGTjU8o9Sn4HaaX"
-      }`;
+      const docURL = `https://gateway.pinata.cloud/ipfs/${ipfs.split(":")[1] || ""}`;
       const mdRes = await axios.get(docURL);
       setVow({
         parties,
         state,
+        signed,
+        collateralTokens,
+        collateralAmounts,
         hash: vowHash,
         arbitrator: formatAddress(stngs.arbitrator),
         content: docURL,
         title: stngs.title,
         markdown: mdRes?.data,
       });
+      setContract(instance);
+      setUserCollateral({
+        token: collateralTokens[_.invert(parties)[address]],
+        amount: collateralAmounts[_.invert(parties)[address]],
+      });
     } catch (error) {
       console.log({ error });
     }
   };
+
+  const sign = async signed => {
+    const collateral = new ethers.Contract(userCollateral?.token, erc20Abi, userSigner);
+    await collateral.approve(address, userCollateral?.amount);
+    console.log({ contract });
+    if (!signed) {
+      await contract.sign(1, { gasLimit: 10000000 });
+    } else {
+      await contract.unstakeCollateral({ gasLimit: 10000000 });
+    }
+    getVow();
+  };
+
+  const terminate = async () => {};
+
   console.log({ vow });
+
   useEffect(() => {
     getVow();
   }, [readContracts, chainId, vowHash]);
+
   if (!vow) return null;
+
+  const userSigned = vow?.signed[_.invert(vow?.parties)[address]];
+
   return (
     <div style={{ alignItems: "center", margin: "auto" }}>
       <div
@@ -71,12 +90,22 @@ function VowViewer({ readContracts, provider, chainId }) {
           justifyContent: "center",
         }}
       >
-        {vow?.state !== 2 && (
-          <Button danger={vow?.state === 1} type="primary" size="small" style={{ width: "100px" }}>
-            {vow?.state === 0 ? "SIGN" : vow?.state === 1 && "Terminate"}
+        {vow?.state === 0 && (
+          <Button
+            danger={userSigned}
+            type="primary"
+            size="small"
+            style={{ width: "100px" }}
+            onClick={() => sign(userSigned)}
+          >
+            {!userSigned ? "SIGN" : "UNSIGN"}
           </Button>
         )}
-
+        {vow?.state === 1 && (
+          <Button danger={true} type="primary" size="small" style={{ width: "100px" }} onClick={terminate}>
+            TERMINATE
+          </Button>
+        )}
         <div
           style={{
             display: "flex",

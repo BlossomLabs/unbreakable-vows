@@ -1,5 +1,6 @@
 import React from "react";
 import MDEditor from "@uiw/react-md-editor";
+import { utils } from "ethers";
 import { Input, DatePicker, InputNumber, Radio, Button, Select } from "antd";
 import _ from "underscore";
 import "./styles.css";
@@ -28,7 +29,7 @@ function EndlessArray({ onChange, onTokensChange }) {
         return (
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
             <p>{i?.substr(0, 5) + "..." + i?.substr(-4)}</p>
-            <p>{amountsArr[k]}</p>
+            <p>{utils.formatUnits(amountsArr[k])}</p>
             <p>{_.invert(tokenOptionsContracts)[tokensArr[k]]}</p>
             <a
               onClick={() => {
@@ -72,13 +73,14 @@ function EndlessArray({ onChange, onTokensChange }) {
         </div>
         <Button
           onClick={async () => {
+            const parsedAmount = utils.parseUnits(amount?.toString(), 18).toString();
             setArr([...arr, val]);
             setTokensArr([...tokensArr, tokenOptionsContracts[selectedToken]]);
-            setAmountsArr([...amountsArr, amount]);
+            setAmountsArr([...amountsArr, parsedAmount]);
             await onTokensChange({
               parties: [...arr, val],
               tokens: [...tokensArr, tokenOptionsContracts[selectedToken]],
-              amounts: [...amountsArr, amount],
+              amounts: [...amountsArr, parsedAmount],
             });
           }}
         >

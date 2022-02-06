@@ -89,35 +89,26 @@ contract UnbreakableVow {
     require(lastSettingIdSigned != _settingId, "ERROR_SIGNER_ALREADY_SIGNED");
     require(_settingId < nextSettingId, "ERROR_INVALID_SIGNING_SETTING");
 
-    if (partiesInfo[msg.sender].depositedAmount < partiesInfo[msg.sender].collateralAmount) {
-      partiesInfo[msg.sender].collateralToken.safeTransferFrom(
-        msg.sender,
-        address(this),
-        partiesInfo[msg.sender].collateralAmount - partiesInfo[msg.sender].depositedAmount
-      );
-      partiesInfo[msg.sender].depositedAmount = partiesInfo[msg.sender].collateralAmount;
-    }
+    // if (partiesInfo[msg.sender].depositedAmount < partiesInfo[msg.sender].collateralAmount) {
+    //   partiesInfo[msg.sender].collateralToken.safeTransferFrom(
+    //     msg.sender,
+    //     address(this),
+    //     partiesInfo[msg.sender].collateralAmount - partiesInfo[msg.sender].depositedAmount
+    //   );
+    //   partiesInfo[msg.sender].depositedAmount = partiesInfo[msg.sender].collateralAmount;
+    // }
 
     partiesInfo[msg.sender].lastSettingIdSigned = _settingId;
     emit Signed(msg.sender, _settingId);
+    _changeSettingIfPossible(_settingId);
   }
 
   function unstakeCollateral() public {
     require (state != UnbreakableVowState.ACTIVE, "ERROR_CAN_NOT_UNSTAKE_FROM_ACTIVE_VOW");
-    uint256 amount = partiesInfo[msg.sender].depositedAmount;
-    partiesInfo[msg.sender].collateralToken.transfer(msg.sender, amount);
+    // uint256 amount = partiesInfo[msg.sender].depositedAmount;
+    // partiesInfo[msg.sender].collateralToken.transfer(msg.sender, amount);
     partiesInfo[msg.sender].depositedAmount = 0;
     partiesInfo[msg.sender].lastSettingIdSigned = 0;
-  }
-
-  function changeSetting(uint256 _settingId) external {
-    require (state != UnbreakableVowState.TERMINATED, "ERROR_CAN_NOT_CHANGE_TERMINATED_VOW");
-    for (uint256 i = 0; i < parties.length(); i++) {
-      require (partiesInfo[parties.at(i)].lastSettingIdSigned == _settingId, "ERROR_NOT_ALL_PARTIES_SIGNED");
-    }
-    currentSettingId = _settingId;
-    state = UnbreakableVowState.ACTIVE;
-    emit SettingChanged(_settingId);
   }
 
   /**
@@ -203,5 +194,17 @@ contract UnbreakableVow {
   function _getSetting(uint256 _settingId) internal view returns (Setting storage) {
     require(_settingId >= 0 && _settingId < nextSettingId, "ERROR_SETTING_DOES_NOT_EXIST");
     return settings[_settingId];
+  }
+
+
+  function _changeSettingIfPossible(uint256 _settingId) private {
+    for (uint256 i = 0; i < parties.length(); i++) {
+      if (partiesInfo[parties.at(i)].lastSettingIdSigned != _settingId) {
+         return;
+      }
+    }
+    currentSettingId = _settingId;
+    state = UnbreakableVowState.ACTIVE;
+    emit SettingChanged(_settingId);
   }
 }

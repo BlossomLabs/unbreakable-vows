@@ -102,3 +102,18 @@ export const pinFileToIPFS = async (
       return false;
     });
 };
+
+export const formatAddress = str => {
+  return str?.substr(0, 5) + "..." + str?.substr(-4);
+};
+
+export const formatState = st => {
+  switch (st) {
+    case 0:
+      return "Unsigned 📝";
+    case 1:
+      return "Active 💍";
+    case 2:
+      return "Terminated 🏁";
+  }
+};

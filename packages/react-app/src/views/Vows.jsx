@@ -3,21 +3,7 @@ import { Table } from "antd";
 import _ from "lodash";
 import { ethers } from "ethers";
 import deployedContracts from "../contracts/hardhat_contracts.json";
-
-const formatAddress = str => {
-  return str?.substr(0, 5) + "..." + str?.substr(-4);
-};
-
-const formatState = st => {
-  switch (st) {
-    case 0:
-      return "Unsigned 📝";
-    case 1:
-      return "Active 💍";
-    case 2:
-      return "Terminated 🏁";
-  }
-};
+import { formatAddress, formatState } from "../templates/utils";
 
 const columns = [
   {
@@ -79,12 +65,13 @@ function Vows({ readContracts, provider, address, chainId }) {
     const vows = await vowsHashes.map(async (i, k) => {
       const instance = new ethers.Contract(i, ABI, provider);
       const stngs = await instance.getCurrentSetting();
-      const [parties, collateralTokens, collateralAmounts, depositedAmounts] = await instance.getParties();
+      const [parties, signed, collateralTokens, collateralAmounts, depositedAmounts] = await instance.getParties();
       const state = await instance.state();
       const ipfs = ethers.utils.toUtf8String(stngs.content);
 
       return {
         parties: [...parties],
+        signed,
         collateralTokens,
         collateralAmounts: collateralAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),
         depositedAmounts: depositedAmounts.map(amount => ethers.utils.formatUnits(amount, 18)),

@@ -294,8 +294,9 @@ function App(props) {
           <Route exact path="/vow/:vowHash">
             <VowViewer
               chainId={selectedChainId}
-              provider={localProvider}
+              userSigner={userSigner}
               readContracts={readContracts}
+              address={address}
               address={address}
             />
           </Route>
