@@ -5,7 +5,7 @@ import { ethers, utils } from "ethers";
 import { useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import deployedContracts from "../contracts/hardhat_contracts.json";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { formatAddress, formatState } from "../templates/utils";
 
 const erc20Abi = [
@@ -62,6 +62,8 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
     } else {
       await contract.unstakeCollateral({ gasLimit: 10000000 });
     }
+    message.success("Processing complete!");
+
     getVow();
   };
 
