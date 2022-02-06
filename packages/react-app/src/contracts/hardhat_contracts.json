@@ -1,0 +1,104 @@
+{
+  "80001": {
+    "mumbai": {
+      "name": "mumbai",
+      "chainId": "80001",
+      "contracts": {
+        "UnbreakableVowFactory": {
+          "address": "0x19c6d80a2617bd1f444133d7e997864d8731cc85",
+          "abi": [
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "arbitrator",
+                  "type": "address"
+                },
+                {
+                  "indexed": false,
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                }
+              ],
+              "name": "NewArbitrator",
+              "type": "event"
+            },
+            {
+              "anonymous": false,
+              "inputs": [
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "vow",
+                  "type": "address"
+                },
+                {
+                  "indexed": true,
+                  "internalType": "address",
+                  "name": "party",
+                  "type": "address"
+                }
+              ],
+              "name": "NewUnbreakableVow",
+              "type": "event"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                }
+              ],
+              "name": "createArbitrator",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "contract IArbitrator",
+                  "name": "_arbitrator",
+                  "type": "address"
+                },
+                {
+                  "internalType": "string",
+                  "name": "_title",
+                  "type": "string"
+                },
+                {
+                  "internalType": "bytes",
+                  "name": "_content",
+                  "type": "bytes"
+                },
+                {
+                  "internalType": "address[]",
+                  "name": "_parties",
+                  "type": "address[]"
+                },
+                {
+                  "internalType": "contract IERC20[]",
+                  "name": "_collateralTokens",
+                  "type": "address[]"
+                },
+                {
+                  "internalType": "uint256[]",
+                  "name": "_collateralAmounts",
+                  "type": "uint256[]"
+                }
+              ],
+              "name": "createUnbreakableVow",
+              "outputs": [],
+              "stateMutability": "nonpayable",
+              "type": "function"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
