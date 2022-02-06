@@ -5,6 +5,7 @@
       "chainId": "80001",
       "contracts": {
         "UnbreakableVow": {
+          "address": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
           "abi": [
             {
               "inputs": [
@@ -75,19 +76,6 @@
               "type": "event"
             },
             {
-              "inputs": [
-                {
-                  "internalType": "uint256",
-                  "name": "_settingId",
-                  "type": "uint256"
-                }
-              ],
-              "name": "changeSetting",
-              "outputs": [],
-              "stateMutability": "nonpayable",
-              "type": "function"
-            },
-            {
               "inputs": [],
               "name": "currentSettingId",
               "outputs": [
@@ -131,6 +119,11 @@
                   "internalType": "address[]",
                   "name": "_parties",
                   "type": "address[]"
+                },
+                {
+                  "internalType": "enum UnbreakableVow.UserState[]",
+                  "name": "_signed",
+                  "type": "uint8[]"
                 },
                 {
                   "internalType": "address[]",
@@ -227,6 +220,19 @@
                 }
               ],
               "stateMutability": "view",
+              "type": "function"
+            },
+            {
+              "inputs": [
+                {
+                  "internalType": "bool",
+                  "name": "offersTermination",
+                  "type": "bool"
+                }
+              ],
+              "name": "terminate",
+              "outputs": [],
+              "stateMutability": "nonpayable",
               "type": "function"
             },
             {
