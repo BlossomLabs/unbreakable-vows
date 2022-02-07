@@ -258,13 +258,13 @@ function App(props) {
       />
       <div style={{ display: "flex", flexDirection: "column" }}>
         <Switch>
-          <Route exact path="/">
+          <Route exact index path="/">
             <Redirect to="/create" />
           </Route>
           <Route path="/vows">
             <Vows chainId={selectedChainId} provider={localProvider} readContracts={readContracts} address={address} />
           </Route>
-          <Route exact path="/vow/:vowHash">
+          <Route path="/vow/:vowHash">
             <VowViewer
               chainId={selectedChainId}
               userSigner={userSigner}

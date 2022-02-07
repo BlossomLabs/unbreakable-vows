@@ -10,7 +10,7 @@ const columns = [
     title: "Title",
     dataIndex: "title",
     key: "title",
-    render: (title, record) => <a href={`/vow/${record.hash}`}>{title || "Untitled Vow"}</a>,
+    render: (title, record) => <a href={`/#/vow/${record.hash}`}>{title || "Untitled Vow"}</a>,
   },
   {
     title: "State",

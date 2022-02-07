@@ -49,7 +49,8 @@ export default function Header() {
             </Menu.Item>
           </Menu>
         }
-        style={{ cursor: "pointer" }} />
+        style={{ cursor: "pointer" }}
+      />
     </a>
   );
 }
