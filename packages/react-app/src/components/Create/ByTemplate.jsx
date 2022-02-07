@@ -9,6 +9,7 @@ import "./styles.css";
 import _ from "underscore";
 import SectionParser from "./SectionParser";
 import moment from "moment";
+import LoadingScreen from "../loading";
 
 const { Step } = Steps;
 
@@ -34,6 +35,7 @@ const ByTemplate = props => {
   const [variables, setVariables] = useState(null);
   const [sections, setSections] = useState(null);
   const [current, setCurrent] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [mdText, setMdText] = useState("null");
   const questions = agreement.questions;
   const template = Handlebars.compile(mdText);
@@ -74,7 +76,7 @@ const ByTemplate = props => {
       uVowsCollateral?.tokens,
       uVowsCollateral?.amounts,
     );
-
+    setIsLoading(true);
     const txDone = await tx.wait();
 
     console.log({ hex, txDone, tx });
@@ -83,6 +85,7 @@ const ByTemplate = props => {
 
     const event = txDone?.events?.find(i => i?.event === "NewUnbreakableVow");
     const vowHash = event?.args?.vow;
+    setIsLoading(false);
     history.push(`/vow/${vowHash}`);
   };
 
@@ -99,6 +102,7 @@ const ByTemplate = props => {
   if (!variables && !sections) return null;
   return (
     <div className="bytemplate-container">
+      <LoadingScreen state={isLoading} tip={"Wait for the transaction "} />
       <div className="left-bytemplate">
         <Steps current={current} direction="vertical" className="left-steps" onChange={c => setCurrent(c)}>
           {_.map(sections, item => (

@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import deployedContracts from "../contracts/hardhat_contracts.json";
 import { Button, message } from "antd";
 import { formatAddress, formatState } from "../templates/utils";
+import LoadingScreen from "../components/loading";
 
 const erc20Abi = [
   "function balanceOf(address owner) view returns (uint256)",
@@ -16,6 +17,7 @@ const erc20Abi = [
 
 function VowViewer({ readContracts, userSigner, chainId, address }) {
   const [vow, setVow] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [contract, setContract] = useState(null);
   const [userCollateral, setUserCollateral] = useState(null);
   const { vowHash } = useParams();
@@ -56,12 +58,14 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
 
   const sign = async signed => {
     const collateral = new ethers.Contract(userCollateral?.token, erc20Abi, userSigner);
+    setIsLoading(true);
     await collateral.approve(address, userCollateral?.amount);
     if (!signed) {
       await (await contract.sign(1, { gasLimit: 10000000 })).wait();
     } else {
       await (await contract.unstakeCollateral({ gasLimit: 10000000 })).wait();
     }
+    setIsLoading(false);
     message.success("Processing complete!");
 
     getVow();
@@ -85,6 +89,8 @@ function VowViewer({ readContracts, userSigner, chainId, address }) {
 
   return (
     <div style={{ alignItems: "center", margin: "auto" }}>
+      <LoadingScreen state={isLoading} tip={"Wait for the transaction "} />
+
       <div
         style={{
           width: "600px",
