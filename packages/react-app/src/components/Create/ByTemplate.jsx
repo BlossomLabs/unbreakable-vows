@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Steps, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import Handlebars from "handlebars";
-import { prepareQuesions, createMDFile, pinFileToIPFS } from "../../templates/utils";
+import { parseTemplate, prepareQuesions, createMDFile, pinFileToIPFS } from "../../templates/utils";
 import "./styles.css";
 import _ from "underscore";
 import SectionParser from "./SectionParser";
@@ -30,14 +30,13 @@ Handlebars.registerHelper("date", function (date) {
 });
 
 const ByTemplate = props => {
-  const { agreement, contract, readContracts } = props;
+  const { agreement, contract } = props;
   const history = useHistory();
   const [variables, setVariables] = useState(null);
-  const [sections, setSections] = useState(null);
+  const [sections, setSections] = useState([]);
   const [current, setCurrent] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [mdText, setMdText] = useState("null");
-  const questions = agreement.questions;
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
   const next = () => {
@@ -51,16 +50,8 @@ const ByTemplate = props => {
     setVariables({ ...variables, [key]: value });
   };
 
-  const getTemplateReady = () => {
-    fetch(agreement.template)
-      .then(response => response.text())
-      .then(text => text.replace(/\{\{\*\*/g, "{{display ").replace(/\*\*}}/g, "}}"))
-      .then(text => {
-        setMdText(text);
-      });
-  };
   const createAndSign = async () => {
-    const { url, blob } = createMDFile(templateReady);
+    const { blob } = createMDFile(templateReady);
     const ipfsHash = await pinFileToIPFS(`${variables?.uVowTitle}.md`, blob);
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
@@ -90,16 +81,18 @@ const ByTemplate = props => {
   };
 
   useEffect(() => {
-    // Set variables
-    const preparedQs = prepareQuesions(questions);
-    setVariables(preparedQs.variables);
-    setSections(preparedQs.sections);
-
-    // Get template ready
-    getTemplateReady();
+    fetch(agreement)
+      .then(response => response.text())
+      .then(text => {
+        const agreement = parseTemplate(text);
+        const preparedQs = prepareQuesions(agreement);
+        setVariables(preparedQs.variables);
+        setSections(preparedQs.sections);
+        setMdText(agreement.template.replace(/\{\{\*\*/g, "{{display ").replace(/\*\*}}/g, "}}"));
+      });
   }, [agreement]);
 
-  if (!variables && !sections) return null;
+  if (!variables || !sections || sections.length === 0) return null;
   return (
     <div className="bytemplate-container">
       <LoadingScreen state={isLoading} tip={"Wait for the transaction "} />

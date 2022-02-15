@@ -1,5 +1,49 @@
 # Independent Contractor Agreement
 
+It is often used when an individual or business is hired to complete a specific project or task on a short term basis.
+
+## Information of involved parties
+- **clientType** *option* Is the client an individual or an organization?
+  - Individual
+  - Organization
+- **individualClientName** *text* (clientType==1) What is the individual client name?
+- **individualClientAddress** *address* (clientType==1) Ethereum address of the client
+- **organizationClientName** *text* (clientType==2) What is the organization client name?
+- **organizationClientAddress** *address* Ethereum address of the client
+- **contractorName** *text* Who is being hired to perform services?
+- **contractorAddress** *address* Ethereum address of the client
+
+## Independent contractor's services
+
+## Compensation
+- **compensationType** *option* How will the independent contractor be paid?
+  - A fixed wage
+  - A set fee
+  - After completing certain milestiones
+  - Other
+
+## Payment schedule
+- **paymentSchedule** *option* When will the payments be made?
+  - Every week
+  - Every month
+  - After independent contractor sends an invoice
+
+## Expenses and Reimbursement
+
+## Commencement of Services
+
+## Termination of Agreement
+
+## Confidentiality
+
+## Insurance
+
+## Disputes
+
+## Agreement Date
+
+# Independent Contractor Agreement
+
 ## Information of involved parties
 {{#eq clientType 1}}
 This independent contractor Agreement (this "Agreement") is made as of this {{**agreementDate**}} by and between {{**individualClientName**}} ("Client"), an individual, with the Ethereum address {{**IndividualClientAddress**}}; and {{**contractorName**}} ("Independent Contractor"), an individual, with the Ethereum address {{**contractorAddress**}}. 

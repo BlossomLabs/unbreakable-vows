@@ -1,4 +1,106 @@
-# Employment contract
+# Employment agreement
+
+A employment agreement is the document by which employers and their employees can define their rights and obligations at the start of the employment relationship.
+
+## Introduction
+- **employerType** *option* Is the employer an individual or an organization?
+  - Individual
+  - Organization
+- **individualEmployerName** *text* (employerType==1) What is the employer's name?
+- **organizationEmployerName** *text* (employerType==2) What is the employer's business name?
+- **organizationType** *option* (employerType==2) What type of organization is the employer's business?
+  - Corporation
+  - Limited liability company
+  - Partnership
+  - DAO
+- **employerAddress** *address* (employerType) What is the employer's Ethereum address?
+- **employeeName** *text* (employerType) What is the employee’s name?
+- **employeeAddress** *address* (employerType) What is the employee's Ethereum address?
+
+## Type of employment
+- **employmentType** *option* What type of employment will this relationship be?
+  - Permantent full-Time
+  - Permanent part-time
+  - Fixed-term
+
+## Position
+- **employeePosition** *text* What will be the employee's position?
+- **employeeDuties** *longtext* Enter the employee’s duties, as they are expected to be performed under this contract.
+
+## Trial period
+- **trialPeriodExist** *option* Is the employee subject to any kind of probationary period at the start of the employment relationship?
+  - Yes
+  - No
+- **timePeriod** *number* (trialPeriodExist==1) How long is the probationary time period?
+
+## Compensation
+- **compensationType** *option* How will the compensation be?
+  - Annual
+  - Hourly
+  - Commission
+  - Wage plus comission
+- **currencyList** *token* What is the currency or currencies that will be used to pay this salary?
+- **annualSalary** *number* (compensationType==1) How much will the annual salary be, in U.S. dollars?
+- **detailsAnnualSalary** *longtext* (compensationType==1) Enter the specific details of how payment is made to the employee each pay period.
+- **hourlySalary** *number* (compensationType==2) Amount of hourly compensation the employee will receive, in U.S. dollars.
+- **detailsHourlySalary** *longtext* (compensationType==2) Enter the specific details of how payment is made to the employee each pay period.
+- **comissionSalary** *longtext* (compensationType==3) Enter the details of the commission compensation structure.
+- **wagePlusCommission** *longtext* (compensationType==4) Enter the details of the wage plus commission compensation structure.
+
+## Bonus
+- **monetaryBonus** *option* Does employee's compensation include any kind of monetary bonus?
+  - Yes
+  - No
+- **bonusStructure** *longtext* (monetaryBonus==1) Enter the details of the employee's bonus structure.
+
+## Performance reviews
+- **review** *option* Will the employee be subject to any kind of review of their compensation, such as a formal or informal discussion at specific time periods?
+  - Yes
+  - No
+- **reviewFrequency** *option* (review==1) How often will compensation be reviewed?
+  - Monthly
+  - Quaterly
+  - Half-year
+  - Annual
+
+## Schedule and Vacations
+- **schedule** *longtext* What will the employee’s work schedule be (including number of hours, specific days if any, etc.)?
+- **vacationExist** *option* Will the employee have vacation periods?
+  - Yes
+  - No
+- **vacation** *option* (vacationExist==1) Will the employer describe how employee can take vacation?
+  - Days
+  - Weeks
+- **vacationDays** *number* (vacation==1) How many days of vacation will employee receive per year?
+- **vacationWeeks** *number* (vacation==2) How many weeks of vacation will employee receive per year?
+- **rollOver** *option* (vacationExist==1) If the employee does not use all of their vacation time, does it roll over to the next year?
+  - Yes
+  - No
+- **vacationLimit** *option* (rollOver==1) Does the employee have a limit to how much vacation time they can roll over and stockpile?
+  - Yes
+  - No
+- **vacationStockpile** *number* (vacationLimit==1) How much vacation time can the employee roll over and stockpile before they must use it or lose it (in days)
+
+## Renovation
+- **renovation** *option* Should the agreement automatically renew?
+  - Yes
+  - No
+- **writtenNotice** *number* (renovation==1) How many weeks notice does the employee need to give for termination?
+
+## Governing Law
+- **governingLaw** *option* Which will be the arbitrator of this agreement?
+  - Celeste
+  - Ethereum address
+
+## Disputes
+- **disputes** *option* In the event a dispute arises, how will it be resolved?
+  - Arbitration
+  - Mediation
+  - Mediation and Arbitration
+- **startingDate** *date* What is the date of this agreement?
+- **endDate** *date* What is the date the employment relationship will end?
+
+# Employment agreement
 
 {{#eq employerType 1}}
 This employment agreement, hereinafter referred to as "Agreement", is entered into and made effective as of the date set forth at the end of this document by and between the following parties: {{**individualEmployerName**}}, an individual, with the Ethereum address {{**employerAddress**}}; and {{**employeeName**}}, an individual, with the Ethereum address {{**employeeAddress**}}.

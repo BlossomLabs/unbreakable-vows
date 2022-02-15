@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { ByTemplate } from "../components/Create/index";
-import EmploymentAgreement from "../templates/employment-agreement";
-import CustomAgreement from "../templates/custom-agreement";
-import IndependentContractor from "../templates/independent-contractor-agreement";
+import EmploymentAgreement from "../templates/employment-agreement.md";
+import CustomAgreement from "../templates/custom-agreement.md";
+import IndependentContractor from "../templates/independent-contractor-agreement.md";
 import { Radio } from "antd";
 
 const modes = ["custom", "employment", "independent-contractor"];

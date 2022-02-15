@@ -2,6 +2,38 @@ import _ from "underscore";
 import axios from "axios";
 import FormData from "form-data";
 
+export function parseTemplate(text) {
+  const [form, template] = text.split("\n# ");
+  const sections = form.split("\n## ");
+  const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/)
+  const obj = {};
+  const questionRex = /^\*\*(\w+)\*\* \*(\w+)\*(?: ?\((.+)\))? ?(.+)((?:\n {2}- .+)*)\n?$/;
+  obj.name = name;
+  obj.description = description;
+  obj.form = {};
+  sections.forEach(section => {
+    const questions = section.split("\n- ");
+    const sectionTitle = questions.shift();
+    obj.form[sectionTitle] = {};
+    questions.forEach(question => {
+      if (question) {
+        let [, variable, type, condition, text, options] = question?.match(questionRex) || [];
+        if (type === "option") {
+          type = options.split("\n  - ").slice(1);
+        }
+        obj.form[sectionTitle][variable] = {
+          text,
+          type,
+          condition,
+        };
+      }
+    });
+  });
+
+  obj.template = "# " + template;
+  return obj;
+}
+
 const uVowsFinalStep = {
   "Create Vow": {
     uVowTitle: {
