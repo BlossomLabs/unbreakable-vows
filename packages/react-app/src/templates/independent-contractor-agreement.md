@@ -30,6 +30,8 @@ It is often used when an individual or business is hired to complete a specific 
 
 ## Expenses and Reimbursement
 
+Expenses
+
 ## Commencement of Services
 
 ## Termination of Agreement
