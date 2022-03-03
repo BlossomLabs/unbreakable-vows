@@ -7,7 +7,7 @@ export function parseTemplate(text) {
   const sections = form.split("\n## ");
   const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/)
   const obj = {};
-  const questionRex = /^\*\*(\w+)\*\* \*(\w+)\*(?: ?\((.+)\))? ?(.+)((?:\n {2}- .+)*)\n?$/;
+  const questionRex = /^\*\*(\w+)\*\* \*(\w+)\*(?: ?\((.+)\))? ?(.+)((?:\n {2}- .+)*)(\n {2}> .+)\n?$/;
   obj.name = name;
   obj.description = description;
   obj.form = {};
@@ -17,7 +17,7 @@ export function parseTemplate(text) {
     obj.form[sectionTitle] = {};
     questions.forEach(question => {
       if (question) {
-        let [, variable, type, condition, text, options] = question?.match(questionRex) || [];
+        let [, variable, type, condition, text, options, info] = question?.match(questionRex) || [];
         if (type === "option") {
           type = options.split("\n  - ").slice(1);
         }
@@ -25,6 +25,7 @@ export function parseTemplate(text) {
           text,
           type,
           condition,
+          info,
         };
       }
     });

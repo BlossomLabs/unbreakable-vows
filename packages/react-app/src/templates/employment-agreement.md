@@ -1,20 +1,24 @@
 # Employment agreement
-
 A employment agreement is the document by which employers and their employees can define their rights and obligations at the start of the employment relationship.
 
 ## Introduction
 - **employerType** *option* Is the employer an individual or an organization?
   - Individual
   - Organization
+  > Choose the type of employer entering into this agreement. If it is a sole proprietor or individual, click "individual". If it is any type of organized business, even a small business, click "Organization".
 - **individualEmployerName** *text* (employerType==1) What is the employer's name?
+  > Enter the full business name of the employer.
 - **organizationEmployerName** *text* (employerType==2) What is the employer's business name?
+  > Enter the full business name of the employer.
 - **organizationType** *option* (employerType==2) What type of organization is the employer's business?
   - Corporation
   - Limited liability company
   - Partnership
   - DAO
+  > Choose the type of organizational structure that best describes the employer's business.
 - **employerAddress** *address* (employerType) What is the employer's Ethereum address?
 - **employeeName** *text* (employerType) What is the employee’s name?
+  > Enter the full name or username of the employee.
 - **employeeAddress** *address* (employerType) What is the employee's Ethereum address?
 
 ## Type of employment
@@ -22,16 +26,20 @@ A employment agreement is the document by which employers and their employees ca
   - Permantent full-Time
   - Permanent part-time
   - Fixed-term
+  > Choose the type legal of employment relationship the parties are creating through this contract.
 
 ## Position
 - **employeePosition** *text* What will be the employee's position?
+  > Enter the title for the employee's new position.
 - **employeeDuties** *longtext* Enter the employee’s duties, as they are expected to be performed under this contract.
-
+  > Enter a description of the employee's duties. These can be tasks they are expected to do on a daily basis or the overall tasks they will be responsible for throughout the course of their employment.
 ## Trial period
 - **trialPeriodExist** *option* Is the employee subject to any kind of probationary period at the start of the employment relationship?
   - Yes
   - No
+  > If the employee has any time period in which they will be on probation, click "Yes"
 - **timePeriod** *number* (trialPeriodExist==1) How long is the probationary time period?
+  > Enter a brief descriptor of the probationary time period that the employee will face.
 
 ## Compensation
 - **compensationType** *option* How will the compensation be?
@@ -39,32 +47,45 @@ A employment agreement is the document by which employers and their employees ca
   - Hourly
   - Commission
   - Wage plus comission
-- **currencyList** *token* What is the currency or currencies that will be used to pay this salary?
+  > Choose the structure of compensation that the employee will receive.
+- **compensationCurrency** *token* What is the currency that will be used to pay this salary?
+  > Choose the currency that will be part of the payment.
 - **annualSalary** *number* (compensationType==1) How much will the annual salary be, in U.S. dollars?
+  > Enter the amount, in U.S. dollars, of the annual salary be the employee will receive.
 - **detailsAnnualSalary** *longtext* (compensationType==1) Enter the specific details of how payment is made to the employee each pay period.
+  > Enter the specific details about how payment is made. Include dates if possible, as well as method of payment.
 - **hourlySalary** *number* (compensationType==2) Amount of hourly compensation the employee will receive, in U.S. dollars.
+  > Enter the amount that the employee will get paid hourly.
 - **detailsHourlySalary** *longtext* (compensationType==2) Enter the specific details of how payment is made to the employee each pay period.
+  > Enter the specific details about how payment is made. Include dates if possible, as well as method of payment.
 - **comissionSalary** *longtext* (compensationType==3) Enter the details of the commission compensation structure.
+  > Enter the specific details of how employee will receive the commission compensation.
 - **wagePlusCommission** *longtext* (compensationType==4) Enter the details of the wage plus commission compensation structure.
+  > Enter the specific details of the employee's wage plus commission compensation structure. Be as specific as possible.
 
 ## Bonus
 - **monetaryBonus** *option* Does employee's compensation include any kind of monetary bonus?
   - Yes
   - No
+  > If employee will receive a monetary bonus, click "Yes".
 - **bonusStructure** *longtext* (monetaryBonus==1) Enter the details of the employee's bonus structure.
+  > Enter any specific details about employee's bonus structure. Make sure to give enough information so that the employee will understand exactly how the bonus structure should work.
 
 ## Performance reviews
 - **review** *option* Will the employee be subject to any kind of review of their compensation, such as a formal or informal discussion at specific time periods?
   - Yes
   - No
+  > If the employer and employee will speak formally or informally at certain intervals about adjusting employee's compensation, click "Yes".
 - **reviewFrequency** *option* (review==1) How often will compensation be reviewed?
   - Monthly
   - Quaterly
   - Half-year
   - Annual
+  > Choose the time period that the best describes when the employer will complete reviews of the compensation structure.
 
 ## Schedule and Vacations
 - **schedule** *longtext* What will the employee’s work schedule be (including number of hours, specific days if any, etc.)?
+  > Enter the specifics of employee's work schedule, including as much detail as possible. 
 - **vacationExist** *option* Will the employee have vacation periods?
   - Yes
   - No
