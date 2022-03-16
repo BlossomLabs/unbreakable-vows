@@ -3,16 +3,22 @@ import { ByTemplate } from "../components/Create/index";
 import EmploymentAgreement from "../templates/employment-agreement.md";
 import CustomAgreement from "../templates/custom-agreement.md";
 import IndependentContractor from "../templates/independent-contractor-agreement.md";
+import MediationAgreement from "../templates/mediation-agreement.md";
 import { Radio } from "antd";
 
-const modes = ["custom", "employment", "independent-contractor"];
+const agreements = {
+  "Employment Agreement": EmploymentAgreement,
+  "Independent Contractor Agreement": IndependentContractor,
+  "Mediation Agreement": MediationAgreement,
+  "Custom Agreement": CustomAgreement,
+};
 
 function Create(props) {
   const { writeContracts } = props;
-  const [mode, setMode] = useState("employment");
+  const [url, setUrl] = useState(EmploymentAgreement);
   const { UnbreakableVowFactory } = writeContracts;
   const onRadioChange = e => {
-    setMode(e.target.value);
+    setUrl(e.target.value);
   };
   return (
     <div
@@ -25,25 +31,13 @@ function Create(props) {
       }}
     >
       <div style={{ marginLeft: 20 }}>
-        <Radio.Group onChange={onRadioChange} value={mode}>
-          <Radio value={modes[1]}>Employment Agreement</Radio>
-          <Radio value={modes[2]}>Independent Contractor Agreement</Radio>
-          <Radio value={modes[0]}>Custom Agreement</Radio>
+        <Radio.Group onChange={onRadioChange} value={url}>
+          {Object.entries(agreements).map(([title, url]) => (
+            <Radio value={url}>{title}</Radio>
+          ))}
         </Radio.Group>
       </div>
-
-      {
-        //Example of React showing markdown
-      }
-      {/* <ReactMarkdown style={{ margin: 32 }}>{templateReady}</ReactMarkdown> */}
-
-      {mode === "custom" ? (
-        <ByTemplate agreement={CustomAgreement} contract={UnbreakableVowFactory} {...props} />
-      ) : mode === "independent-contractor" ? (
-        <ByTemplate agreement={IndependentContractor} contract={UnbreakableVowFactory} {...props} />
-      ) : (
-        <ByTemplate agreement={EmploymentAgreement} contract={UnbreakableVowFactory} {...props} />
-      )}
+      <ByTemplate agreement={url} contract={UnbreakableVowFactory} {...props} />
     </div>
   );
 }
