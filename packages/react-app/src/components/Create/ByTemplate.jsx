@@ -51,14 +51,9 @@ const ByTemplate = props => {
     let newVariables = { ...variables, [key]: value };
     if (agreement?.title === "Employment Agreement") {
       // preset variables for last step
-      newVariables.uVowsParties = {
-        parties: [newVariables.employerAddress, newVariables.employeeAddress],
-        amounts: [newVariables.collateral, newVariables.collateral],
-        tokens: [newVariables.currency, newVariables.currency],
-      };
-
       newVariables.uVow = {
-        parties: [variables.employerAddress, variables.employeeAddress],
+        party1: variables.employerAddress,
+        party2: variables.employeeAddress,
         startDate: variables.startDate,
         endDate: variables.endDate,
         collateralAmount: variables.collateral,
