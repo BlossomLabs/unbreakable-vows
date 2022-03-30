@@ -6,19 +6,19 @@ import IndependentContractor from "../templates/independent-contractor-agreement
 import MediationAgreement from "../templates/mediation-agreement.md";
 import { Radio } from "antd";
 
-const agreements = {
-  "Employment Agreement": EmploymentAgreement,
-  "Independent Contractor Agreement": IndependentContractor,
-  "Mediation Agreement": MediationAgreement,
-  "Custom Agreement": CustomAgreement,
-};
+const agreements = [
+  { url: EmploymentAgreement, title: "Employment Agreement" },
+  { url: IndependentContractor, title: "Independent Contractor Agreement" },
+  { url: MediationAgreement, title: "Mediation Agreement" },
+  { url: CustomAgreement, title: "Custom Agreement" },
+];
 
 function Create(props) {
   const { writeContracts } = props;
-  const [url, setUrl] = useState(EmploymentAgreement);
+  const [agreement, setAgreement] = useState(agreements[0]);
   const { UnbreakableVowFactory } = writeContracts;
   const onRadioChange = e => {
-    setUrl(e.target.value);
+    setAgreement(e.target.value);
   };
   return (
     <div
@@ -31,13 +31,13 @@ function Create(props) {
       }}
     >
       <div style={{ marginLeft: 20 }}>
-        <Radio.Group onChange={onRadioChange} value={url}>
-          {Object.entries(agreements).map(([title, url]) => (
-            <Radio value={url}>{title}</Radio>
+        <Radio.Group onChange={onRadioChange} value={agreement}>
+          {agreements.map(val => (
+            <Radio value={val}>{val?.title}</Radio>
           ))}
         </Radio.Group>
       </div>
-      <ByTemplate agreement={url} contract={UnbreakableVowFactory} {...props} />
+      <ByTemplate agreement={agreement} contract={UnbreakableVowFactory} {...props} />
     </div>
   );
 }

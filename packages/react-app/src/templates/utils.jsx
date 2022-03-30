@@ -5,7 +5,7 @@ import FormData from "form-data";
 export function parseTemplate(text) {
   const [form, template] = text.split("\n# ");
   const sections = form.split("\n## ");
-  const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/)
+  const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/);
   const obj = {};
   const questionRex = /^\*\*(\w+)\*\* \*(\w+)\*(?: ?\((.+)\))? ?(.+)((?:\n {2}- .+)*)(\n {2}> .+)?\n?$/;
   obj.name = name;

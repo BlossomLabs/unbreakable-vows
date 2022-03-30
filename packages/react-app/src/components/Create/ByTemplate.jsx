@@ -39,15 +39,37 @@ const ByTemplate = props => {
   const [mdText, setMdText] = useState("null");
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
+
   const next = () => {
     setCurrent(current + 1);
   };
   const prev = () => {
     setCurrent(current - 1);
   };
-
+  console.log({ variables });
   const setInputs = (key, value) => {
-    setVariables({ ...variables, [key]: value });
+    let newVariables = { ...variables, [key]: value };
+    if (agreement?.title === "Employment Agreement") {
+      // preset variables for last step
+      newVariables.uVowsParties = {
+        parties: [newVariables.employerAddress, newVariables.employeeAddress],
+        amounts: [newVariables.collateral, newVariables.collateral],
+        tokens: [newVariables.currency, newVariables.currency],
+      };
+
+      newVariables.uVow = {
+        parties: [variables.employerAddress, variables.employeeAddress],
+        startDate: variables.startDate,
+        endDate: variables.endDate,
+        collateralAmount: variables.collateral,
+        collateralToken: variables.currency,
+        flowAmount: variables.annualSalary,
+        flowCurrency: variables.currency,
+        flowSender: variables.employerAddress,
+        flowReceiver: variables.employeeAddress,
+      };
+    }
+    setVariables(newVariables);
   };
 
   const createAndSign = async () => {
@@ -56,16 +78,16 @@ const ByTemplate = props => {
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
     // Validate main inputs
-    if (!hex || !variables?.uVowTitle || !variables?.uVowsCollateral) return message.error("Complete all fields");
-    const { uVowTitle, uVowsCollateral } = variables;
+    if (!hex || !variables?.uVowTitle || !variables?.uVowsParties) return message.error("Complete all fields");
+    const { uVowTitle, uVowsParties } = variables;
     const tx = await contract.createUnbreakableVow(
       // readContracts.Arbitrator.address,
-      uVowsCollateral?.tokens[0],
+      uVowsParties?.tokens[0],
       uVowTitle,
       hex,
-      uVowsCollateral?.parties,
-      uVowsCollateral?.tokens,
-      uVowsCollateral?.amounts,
+      uVowsParties?.parties,
+      uVowsParties?.tokens,
+      uVowsParties?.amounts,
     );
     setIsLoading(true);
     const txDone = await tx.wait();
@@ -81,7 +103,7 @@ const ByTemplate = props => {
   };
 
   useEffect(() => {
-    fetch(agreement)
+    fetch(agreement?.url)
       .then(response => response.text())
       .then(text => {
         const agreement = parseTemplate(text);
@@ -93,6 +115,7 @@ const ByTemplate = props => {
   }, [agreement]);
 
   if (!variables || !sections || sections.length === 0) return null;
+
   return (
     <div className="bytemplate-container">
       <LoadingScreen state={isLoading} tip={"Wait for the transaction "} />
@@ -104,6 +127,8 @@ const ByTemplate = props => {
         </Steps>
         <div className="steps-content">
           {<SectionParser setInputs={setInputs} section={sections[current]} variables={variables} {...props} />}
+          {current === sections.length - 1 && <div>{JSON.stringify(variables?.uVow, null, "\t")}</div>}
+
           <div className="steps-action">
             {current < sections.length - 1 && (
               <Button type="primary" onClick={() => next()}>
