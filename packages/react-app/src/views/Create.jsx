@@ -20,6 +20,7 @@ function Create(props) {
   const onRadioChange = e => {
     setAgreement(e.target.value);
   };
+
   return (
     <div
       style={{

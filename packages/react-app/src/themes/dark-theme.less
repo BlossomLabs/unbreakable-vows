@@ -7,16 +7,25 @@
 @secondary-color: white;
 @border-radius-base: 4px;
 
-@component-background: #212121;
-@body-background: #212121;
+@component-background: rgba(32, 28, 29, 1);
+@body-background: rgba(32, 28, 29, 1);
 @popover-background: #212121;
 @border-color-base: #6f6c6c;
 @border-color-split: #424242;
 @table-header-sort-active-bg: #424242;
-@card-skeleton-bg: #424242;
-@skeleton-color: #424242;
+@card-skeleton-bg: rgba(32, 28, 29, 1);
+@skeleton-color: rgba(32, 28, 29, 1);
 @table-header-sort-active-bg: #424242;
 
 .highlight {
   background-color: #3f3f3f;
+}
+
+body {
+  background: transparent;
+  background: radial-gradient(circle, rgba(75, 59, 52, 1) 14%, rgba(32, 28, 29, 1) 66%);
+  height: 100%;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }

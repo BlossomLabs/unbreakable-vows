@@ -81,6 +81,15 @@ const ByTemplate = props => {
       uVowsParties?.tokens,
       uVowsParties?.amounts,
     );
+    // const tx = await contract.createUnbreakableVow(
+    //   // readContracts.Arbitrator.address,
+    //   uVowsParties?.tokens[0],
+    //   uVowTitle,
+    //   hex,
+    //   [variables.uVow.party1, variables.uVow.party2],
+    //   uVowsParties?.tokens,
+    //   uVowsParties?.amounts,
+    // );
     setIsLoading(true);
     const txDone = await tx.wait();
 

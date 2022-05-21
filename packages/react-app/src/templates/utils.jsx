@@ -72,8 +72,8 @@ const uVowsFinalStep = {
 };
 
 export const prepareQuesions = questions => {
-  // const form = { ...questions?.form, ...uVowsFinalStep };
-  const form = { ...questions?.form };
+  const form = { ...questions?.form, ...uVowsFinalStep };
+  // const form = { ...questions?.form };
   let variables = {};
   let sections = [];
   let sectionIterator = 0;
