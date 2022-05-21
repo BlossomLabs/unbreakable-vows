@@ -39,7 +39,6 @@ const ByTemplate = props => {
   const [mdText, setMdText] = useState("null");
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
-
   const next = step => {
     setCurrent(current + step);
   };
@@ -70,26 +69,16 @@ const ByTemplate = props => {
     const bytes = utils.toUtf8Bytes(ipfsHash);
     const hex = utils.hexlify(bytes);
     // Validate main inputs
-    if (!hex || !variables?.uVowTitle || !variables?.uVowsParties) return message.error("Complete all fields");
+    if (!hex || !variables?.uVowTitle || !variables?.uVowsCollateral) return message.error("Complete all fields");
     const { uVowTitle, uVowsParties } = variables;
     const tx = await contract.createUnbreakableVow(
-      // readContracts.Arbitrator.address,
-      uVowsParties?.tokens[0],
+      props.readContracts.Arbitrator.address,
       uVowTitle,
       hex,
-      uVowsParties?.parties,
-      uVowsParties?.tokens,
-      uVowsParties?.amounts,
+      [variables.uVow.party1, variables.uVow.party2],
+      [variables.uVowsCollateral.tokenAddress, variables.uVowsCollateral.tokenAddress],
+      [variables.uVowsCollateral.amount, variables.uVowsCollateral.amount],
     );
-    // const tx = await contract.createUnbreakableVow(
-    //   // readContracts.Arbitrator.address,
-    //   uVowsParties?.tokens[0],
-    //   uVowTitle,
-    //   hex,
-    //   [variables.uVow.party1, variables.uVow.party2],
-    //   uVowsParties?.tokens,
-    //   uVowsParties?.amounts,
-    // );
     setIsLoading(true);
     const txDone = await tx.wait();
 
