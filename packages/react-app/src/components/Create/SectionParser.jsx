@@ -18,7 +18,7 @@ const mumbaiTokenOptionsContracts = {
   TST: "0x2d7882bedcbfddce29ba99965dd3cdf7fcb10a1e",
 };
 
-function EndlessArray({ onChange, onTokensChange, tokenOptions, tokenOptionsContracts }) {
+function EndlessArray({ value, onChange, onTokensChange, tokenOptions, tokenOptionsContracts }) {
   const [val, setVal] = useState(null);
   const [arr, setArr] = useState([]);
   const [tokensArr, setTokensArr] = useState([]);
@@ -27,10 +27,9 @@ function EndlessArray({ onChange, onTokensChange, tokenOptions, tokenOptionsCont
   const [amount, setAmount] = useState(0);
   const [currentToken, setCurrentToken] = useState(null);
   const Option = Select.Option;
-
   return (
     <div>
-      {arr.map((i, k) => {
+      {arr?.map((i, k) => {
         return (
           <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
             <p>{i?.substr(0, 5) + "..." + i?.substr(-4)}</p>
@@ -177,8 +176,9 @@ function SectionParser(props) {
       case "endlessArray":
         return (
           <EndlessArray
+            value={variables[key]}
             onChange={i => setInputs(key, i)}
-            onTokensChange={i => setInputs("uVowsCollateral", i)}
+            onTokensChange={i => setInputs(key, i)}
             tokenOptions={tokenOptions}
             tokenOptionsContracts={tokenOptionsContracts}
           />

@@ -54,7 +54,7 @@ const { ethers } = require("ethers");
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.mumbai; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const initialNetwork = NETWORKS.localhost; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -270,7 +270,6 @@ function App(props) {
               userSigner={userSigner}
               readContracts={readContracts}
               address={address}
-              address={address}
             />
           </Route>
           <Route exact path="/create">
@@ -379,7 +378,7 @@ function App(props) {
         </Switch>
       </div>
 
-      {/* <ThemeSwitch /> */}
+      <ThemeSwitch />
 
       {/* 👨‍💼 Your account is in the top right with a wallet at connect options */}
       <div style={{ position: "fixed", textAlign: "right", right: 0, top: 0, padding: 10 }}>

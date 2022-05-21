@@ -5,7 +5,7 @@ import FormData from "form-data";
 export function parseTemplate(text) {
   const [form, template] = text.split("\n# ");
   const sections = form.split("\n## ");
-  const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/)
+  const [, name, description] = sections.shift().match(/^# (.+)\n+(.+)\n*/);
   const obj = {};
   const questionRex = /^\*\*(\w+)\*\* \*(\w+)\*(?: ?\((.+)\))? ?(.+)((?:\n {2}- .+)*)(\n {2}> .+)?\n?$/;
   obj.name = name;
@@ -41,38 +41,39 @@ const uVowsFinalStep = {
       text: "What's the title of this vow?",
       type: "text",
     },
-    uVowsParties: {
-      text: "Set the addresses of all parties involved and their collateral",
-      type: "endlessArray",
-    },
-    // uVowsCollateral: {
-    //   text: "Set the collateral",
-    //   type: "tokenAmount",
+    // uVowsParties: {
+    //   text: "Set the addresses of all parties involved and their collateral",
+    //   type: "endlessArray",
     // },
-    uVowSuperfluid: {
-      text: "Will this agreement have a SuperFluid Flow",
-      type: ["Yes", "No"],
-    },
-    uVowSuperfluidAmount: {
-      text: "How much will you pay on superfluid?",
+    uVowsCollateral: {
+      text: "Set the collateral",
       type: "tokenAmount",
-      condition: "uVowSuperfluid==1",
     },
-    uVowSuperfluidRecepient: {
-      text: "What's the recepient address?",
-      type: "text",
-      condition: "uVowSuperfluid==1",
-    },
-    uVowSuperFluidFrecuency: {
-      text: "How often will it be?",
-      type: ["Monthly", "Annual"],
-      condition: "uVowSuperfluid==1",
-    },
+    // uVowSuperfluid: {
+    //   text: "Will this agreement have a SuperFluid Flow",
+    //   type: ["Yes", "No"],
+    // },
+    // uVowSuperfluidAmount: {
+    //   text: "How much will you pay on superfluid?",
+    //   type: "tokenAmount",
+    //   condition: "uVowSuperfluid==1",
+    // },
+    // uVowSuperfluidRecepient: {
+    //   text: "What's the recepient address?",
+    //   type: "text",
+    //   condition: "uVowSuperfluid==1",
+    // },
+    // uVowSuperFluidFrecuency: {
+    //   text: "How often will it be?",
+    //   type: ["Monthly", "Annual"],
+    //   condition: "uVowSuperfluid==1",
+    // },
   },
 };
 
 export const prepareQuesions = questions => {
   const form = { ...questions?.form, ...uVowsFinalStep };
+  // const form = { ...questions?.form };
   let variables = {};
   let sections = [];
   let sectionIterator = 0;
