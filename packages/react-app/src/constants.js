@@ -12,21 +12,21 @@ export const ALCHEMY_KEY = "oKxs-03sij-U_N0iOlrSsZFr29-IqbuF";
 export const NETWORKS = {
   localhost: {
     name: "localhost",
-    color: "#666666",
+    color: "var(--primary-color)",
     chainId: 31337,
     blockExplorer: "",
     rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":8545",
   },
   mainnet: {
     name: "mainnet",
-    color: "#ff8b9e",
+    color: "var(--primary-color)",
     chainId: 1,
     rpcUrl: `https://mainnet.infura.io/v3/${INFURA_ID}`,
     blockExplorer: "https://etherscan.io/",
   },
   kovan: {
     name: "kovan",
-    color: "#7003DD",
+    color: "var(--primary-color)",
     chainId: 42,
     rpcUrl: `https://kovan.infura.io/v3/${INFURA_ID}`,
     blockExplorer: "https://kovan.etherscan.io/",
@@ -34,7 +34,7 @@ export const NETWORKS = {
   },
   rinkeby: {
     name: "rinkeby",
-    color: "#e0d068",
+    color: "var(--primary-color)",
     chainId: 4,
     rpcUrl: `https://rinkeby.infura.io/v3/${INFURA_ID}`,
     faucet: "https://faucet.rinkeby.io/",
@@ -42,7 +42,7 @@ export const NETWORKS = {
   },
   ropsten: {
     name: "ropsten",
-    color: "#F60D09",
+    color: "var(--primary-color)",
     chainId: 3,
     faucet: "https://faucet.ropsten.be/",
     blockExplorer: "https://ropsten.etherscan.io/",
@@ -50,7 +50,7 @@ export const NETWORKS = {
   },
   goerli: {
     name: "goerli",
-    color: "#0975F6",
+    color: "var(--primary-color)",
     chainId: 5,
     faucet: "https://goerli-faucet.slock.it/",
     blockExplorer: "https://goerli.etherscan.io/",
@@ -58,7 +58,7 @@ export const NETWORKS = {
   },
   xdai: {
     name: "xdai",
-    color: "#48a9a6",
+    color: "var(--primary-color)",
     chainId: 100,
     price: 1,
     gasPrice: 1000000000,
@@ -68,7 +68,7 @@ export const NETWORKS = {
   },
   polygon: {
     name: "polygon",
-    color: "#2bbdf7",
+    color: "var(--primary-color)",
     chainId: 137,
     price: 1,
     gasPrice: 1000000000,
@@ -77,7 +77,7 @@ export const NETWORKS = {
   },
   mumbai: {
     name: "mumbai",
-    color: "#92D9FA",
+    color: "var(--primary-color)",
     chainId: 80001,
     price: 1,
     gasPrice: 1000000000,
@@ -88,28 +88,28 @@ export const NETWORKS = {
   },
   localArbitrum: {
     name: "localArbitrum",
-    color: "#50a0ea",
+    color: "var(--primary-color)",
     chainId: 153869338190755,
     blockExplorer: "",
     rpcUrl: `http://localhost:8547`,
   },
   localArbitrumL1: {
     name: "localArbitrumL1",
-    color: "#50a0ea",
+    color: "var(--primary-color)",
     chainId: 44010,
     blockExplorer: "",
     rpcUrl: `http://localhost:7545`,
   },
   rinkebyArbitrum: {
     name: "Arbitrum Testnet",
-    color: "#50a0ea",
+    color: "var(--primary-color)",
     chainId: 421611,
     blockExplorer: "https://rinkeby-explorer.arbitrum.io/#/",
     rpcUrl: `https://rinkeby.arbitrum.io/rpc`,
   },
   arbitrum: {
     name: "Arbitrum",
-    color: "#50a0ea",
+    color: "var(--primary-color)",
     chainId: 42161,
     blockExplorer: "https://explorer.arbitrum.io/#/",
     rpcUrl: `https://arb1.arbitrum.io/rpc`,
@@ -117,14 +117,14 @@ export const NETWORKS = {
   },
   localOptimismL1: {
     name: "localOptimismL1",
-    color: "#f01a37",
+    color: "var(--primary-color)",
     chainId: 31337,
     blockExplorer: "",
     rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":9545",
   },
   localOptimism: {
     name: "localOptimism",
-    color: "#f01a37",
+    color: "var(--primary-color)",
     chainId: 420,
     blockExplorer: "",
     rpcUrl: "http://" + (global.window ? window.location.hostname : "localhost") + ":8545",
@@ -140,14 +140,14 @@ export const NETWORKS = {
   },
   optimism: {
     name: "optimism",
-    color: "#f01a37",
+    color: "var(--primary-color)",
     chainId: 10,
     blockExplorer: "https://optimistic.etherscan.io/",
     rpcUrl: `https://mainnet.optimism.io`,
   },
   localAvalanche: {
     name: "localAvalanche",
-    color: "#666666",
+    color: "var(--primary-color)",
     chainId: 43112,
     blockExplorer: "",
     rpcUrl: `http://localhost:9650/ext/bc/C/rpc`,
@@ -155,7 +155,7 @@ export const NETWORKS = {
   },
   fujiAvalanche: {
     name: "fujiAvalanche",
-    color: "#666666",
+    color: "var(--primary-color)",
     chainId: 43113,
     blockExplorer: "https://cchain.explorer.avax-test.network/",
     rpcUrl: `https://api.avax-test.network/ext/bc/C/rpc`,
@@ -163,7 +163,7 @@ export const NETWORKS = {
   },
   mainnetAvalanche: {
     name: "mainnetAvalanche",
-    color: "#666666",
+    color: "var(--primary-color)",
     chainId: 43114,
     blockExplorer: "https://cchain.explorer.avax.network/",
     rpcUrl: `https://api.avax.network/ext/bc/C/rpc`,
@@ -171,7 +171,7 @@ export const NETWORKS = {
   },
   testnetHarmony: {
     name: "testnetHarmony",
-    color: "#00b0ef",
+    color: "var(--primary-color)",
     chainId: 1666700000,
     blockExplorer: "https://explorer.pops.one/",
     rpcUrl: `https://api.s0.b.hmny.io`,
@@ -179,7 +179,7 @@ export const NETWORKS = {
   },
   mainnetHarmony: {
     name: "mainnetHarmony",
-    color: "#00b0ef",
+    color: "var(--primary-color)",
     chainId: 1666600000,
     blockExplorer: "https://explorer.harmony.one/",
     rpcUrl: `https://api.harmony.one`,
@@ -195,7 +195,7 @@ export const NETWORKS = {
   },
   testnetFantom: {
     name: "testnetFantom",
-    color: "#1969ff",
+    color: "var(--primary-color)",
     chainId: 4002,
     blockExplorer: "https://testnet.ftmscan.com/",
     rpcUrl: `https://rpc.testnet.fantom.network`,
