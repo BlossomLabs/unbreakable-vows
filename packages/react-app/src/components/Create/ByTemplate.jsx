@@ -40,31 +40,28 @@ const ByTemplate = props => {
   const template = Handlebars.compile(mdText);
   const templateReady = template(variables);
 
-  const next = () => {
-    setCurrent(current + 1);
+  const next = step => {
+    setCurrent(current + step);
   };
-  const prev = () => {
-    setCurrent(current - 1);
-  };
-  console.log({ variables });
+
   const setInputs = (key, value) => {
-    let newVariables = { ...variables, [key]: value };
+    let newVars = { ...variables, [key]: value };
     if (agreement?.title === "Employment Agreement") {
       // preset variables for last step
-      newVariables.uVow = {
-        party1: variables.employerAddress,
-        party2: variables.employeeAddress,
-        startDate: variables.startDate,
-        endDate: variables.endDate,
-        collateralAmount: variables.collateral,
-        collateralToken: variables.currency,
-        flowAmount: variables.annualSalary,
-        flowCurrency: variables.currency,
-        flowSender: variables.employerAddress,
-        flowReceiver: variables.employeeAddress,
+      newVars.uVow = {
+        party1: newVars.employerAddress,
+        party2: newVars.employeeAddress,
+        startDate: newVars.startingDate,
+        endDate: newVars.endDate,
+        collateralAmount: newVars.collateral,
+        collateralToken: newVars.currency,
+        flowAmount: newVars.annualSalary,
+        flowCurrency: newVars.currency,
+        flowSender: newVars.employerAddress,
+        flowReceiver: newVars.employeeAddress,
       };
     }
-    setVariables(newVariables);
+    setVariables(newVars);
   };
 
   const createAndSign = async () => {
@@ -110,7 +107,7 @@ const ByTemplate = props => {
   }, [agreement]);
 
   if (!variables || !sections || sections.length === 0) return null;
-
+  console.log({ variables });
   return (
     <div className="bytemplate-container">
       <LoadingScreen state={isLoading} tip={"Wait for the transaction "} />
@@ -126,7 +123,7 @@ const ByTemplate = props => {
 
           <div className="steps-action">
             {current < sections.length - 1 && (
-              <Button type="primary" onClick={() => next()}>
+              <Button type="primary" onClick={() => next(1)}>
                 Next
               </Button>
             )}
@@ -136,7 +133,7 @@ const ByTemplate = props => {
               </Button>
             )}
             {current > 0 && (
-              <Button style={{ margin: "0 8px" }} onClick={() => prev()}>
+              <Button style={{ margin: "0 8px" }} onClick={() => next(-1)}>
                 Previous
               </Button>
             )}
