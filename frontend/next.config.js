@@ -10,6 +10,7 @@ const nextConfig = {
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
   },
+  transpilePackages: ["unbreakable-vows-ui"],
   async rewrites() {
     return {
       afterFiles: [{ source: "/:path*", destination: "/" }],

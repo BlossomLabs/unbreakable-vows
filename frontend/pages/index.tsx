@@ -1,6 +1,5 @@
 import Head from "next/head";
 import Landing from "@/components/landing";
-// import PreLaunch from "@/components/landing/prelaunch";
 import styles from "../styles/Home.module.css";
 
 export default function Home(props: any) {

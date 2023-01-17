@@ -1,20 +1,17 @@
 import styled from "styled-components";
-import { Flex } from "../styled-components/flex";
-import { H1 } from "../styled-components/text";
+import { Potion } from "unbreakable-vows-ui/src/components/Illustrations";
 
 const Index = () => {
   return (
     <>
-      <Section flexDirection="column">
-        <div>
-          <H1>Vows and spells</H1>
-        </div>
+      <Section>
+        <Potion />
       </Section>
     </>
   );
 };
 
-const Section = styled(Flex)`
+const Section = styled.div`
   flex-direction: row;
   margin: 10%;
   justify-content: space-between;

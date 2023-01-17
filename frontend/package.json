@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@next/font": "^13.0.3",
+    "@next/font": "^13.1.2",
     "@rainbow-me/rainbowkit": "^0.8.1",
     "@react-spring/parallax": "^9.5.5",
     "@react-spring/web": "^9.5.5",
@@ -17,7 +17,7 @@
     "eslint-config-next": "^13.1.1",
     "ethers": "^5.7.2",
     "iron-session": "^6.3.1",
-    "next": "^13.1.1",
+    "next": "^13.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "siwe": "^2.1.3",

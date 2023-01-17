@@ -1,6 +1,4 @@
-# Unbreakable Vows
-
----
+# Unbreakable Vows 🤝
 
 - [Next.js](https://nextjs.org/)
 - [RainbowKit](https://www.rainbowkit.com/)
