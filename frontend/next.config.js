@@ -9,12 +9,21 @@ const nextConfig = {
     fontLoaders: [
       { loader: "@next/font/google", options: { subsets: ["latin"] } },
     ],
+    esmExternals: true,
   },
   transpilePackages: ["unbreakable-vows-ui"],
   async rewrites() {
     return {
       afterFiles: [{ source: "/:path*", destination: "/" }],
     };
+  },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: ["@svgr/webpack"],
+    });
+
+    return config;
   },
 };
 

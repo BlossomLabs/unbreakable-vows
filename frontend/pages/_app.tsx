@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
-import { ThemeProvider } from "styled-components";
+import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { Crimson_Pro } from "@next/font/google";
 import { defaultTheme } from "../styles/theme";
 import Header from "@/components/general/header/header";
@@ -23,6 +23,7 @@ import { mainnet, polygon, gnosis, goerli, localhost } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import { SiweMessage } from "siwe";
+import chakraTheme from "unbreakable-vows-ui/src/theme/customTheme";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import type { AppProps } from "next/app";
@@ -30,10 +31,6 @@ import type { AppProps } from "next/app";
 const ALCHEMY_API_KEY = process.env.NEXT_PUBLIC_ALCHEMY_API_KEY || "";
 
 const CrimsonPro = Crimson_Pro({ weight: "400", subsets: ["latin"] });
-
-const theme = {
-  colors: defaultTheme.colors,
-};
 
 const { chains, provider, webSocketProvider } = configureChains(
   [
@@ -170,10 +167,10 @@ export default function App({ Component, pageProps }: AppProps) {
       >
         <RainbowKitProvider appInfo={demoAppInfo} chains={chains}>
           <main className={CrimsonPro.className}>
-            <ThemeProvider theme={theme}>
+            <ChakraProvider theme={extendTheme(chakraTheme)}>
               <Header />
               <Component {...pageProps} />
-            </ThemeProvider>
+            </ChakraProvider>
           </main>
         </RainbowKitProvider>
       </RainbowKitAuthenticationProvider>
