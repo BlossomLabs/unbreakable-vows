@@ -112,6 +112,7 @@ A employment agreement is the document by which employers and their employees ca
 - **governingLaw** *option* Which will be the arbitrator of this agreement?
   - Celeste
   - Ethereum address
+  - Kleros General Court (on Ethereum)
 
 ## Disputes
 - **disputes** *option* In the event a dispute arises, how will it be resolved?
